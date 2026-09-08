@@ -40,3 +40,4 @@
 
 > การเปิด `index.html` แบบ `file://` จะยังไม่ทำให้ URL ใช้ได้จากมือถือเครื่องอื่น
 > สำหรับการใช้งานจริง ให้ deploy เว็บขึ้น GitHub Pages / Netlify / Vercel ก่อน
+> GitHub Pages deployment
