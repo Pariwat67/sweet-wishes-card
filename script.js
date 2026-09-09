@@ -15,9 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================= */
 
   const GITHUB_IMAGES = [
-    "images/photo1.jpg",
-    "images/photo2.jpg",
-    "images/photo3.jpg"
+   "images/S_44457989_0.jpg",
+  "images/S__48840712_0.jpg",
+  "images/S__48840715_0.jpg",
+  "images/S__48840716_0.jpg"
   ];
 
   const state = {
