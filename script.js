@@ -1,1923 +1,787 @@
 /* =========================================================
    SWEET WISHES
-   CARD ONLY VERSION
+   CARD DISPLAY ONLY
    ========================================================= */
 
 "use strict";
 
+document.addEventListener("DOMContentLoaded", () => {
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+  /* =========================================================
+     ELEMENTS
+     ========================================================= */
 
+  const fullCard = document.getElementById("fullCard");
+  const cardTitle = document.getElementById("cardTitle");
+  const cardRecipient = document.getElementById("cardRecipient");
+  const cardMessage = document.getElementById("cardMessage");
+  const cardSender = document.getElementById("cardSender");
 
-    /* =======================================================
-       HELPER
-       ======================================================= */
+  const gallery = document.getElementById("gallery");
 
-    const $ = (id) => {
-      return document.getElementById(id);
-    };
+  const musicPlayer = document.getElementById("musicPlayer");
+  const musicName = document.getElementById("musicName");
+  const musicLink = document.getElementById("musicLink");
 
+  const blowBtn = document.getElementById("blowBtn");
+  const blowMessage = document.getElementById("blowMessage");
 
-    /* =======================================================
-       GITHUB IMAGES
-       ======================================================= */
-
-    const GITHUB_IMAGES = [
-      "images/S__44457989_0.jpg",
-      "images/S__48840712_0.jpg",
-      "images/S__48840715_0.jpg",
-      "images/S__48840716_0.jpg"
-    ];
+  const particles = document.getElementById("particles");
 
 
-    /* =======================================================
-       STATE
-       ======================================================= */
+  /* =========================================================
+     DEFAULT DATA
+     ========================================================= */
 
-    const state = {
-
-      recipient: "",
-
-      title:
-        "Happy Birthday!",
-
-      message: "",
-
-      sender: "",
-
-      theme:
-        "pink",
-
-      music: "",
-
-      musicName: ""
-
-    };
+  const DEFAULT_DATA = {
+    recipient: "ชื่อคนรับ",
+    title: "Happy Birthday!",
+    message: "ขอให้มีความสุขมาก ๆ ในวันเกิดนะ 💗",
+    sender: "— จากใคร —",
+    theme: "pink",
+    music: "",
+    musicName: "เพลงของเรา"
+  };
 
 
-    /* =======================================================
-       THEME
-       ======================================================= */
+  /* =========================================================
+     GALLERY
+     ========================================================= */
 
-    function applyTheme(
-      element,
-      theme
-    ) {
-
-      if (!element) {
-        return;
-      }
+  const GITHUB_IMAGES = [
+    "images/S__44457989_0.jpg",
+    "images/S__48840712_0.jpg",
+    "images/S__48840715_0.jpg",
+    "images/S__48840716_0.jpg"
+  ];
 
 
-      const validThemes = [
-        "pink",
-        "blue",
-        "purple",
-        "cream"
-      ];
+  /* =========================================================
+     THEME
+     ========================================================= */
+
+  const THEMES = [
+    "pink",
+    "blue",
+    "purple",
+    "cream"
+  ];
+
+  function applyTheme(theme) {
+
+    const selectedTheme = THEMES.includes(theme)
+      ? theme
+      : "pink";
+
+    if (!fullCard) return;
+
+    fullCard.classList.remove(
+      "theme-pink",
+      "theme-blue",
+      "theme-purple",
+      "theme-cream"
+    );
+
+    fullCard.classList.add(`theme-${selectedTheme}`);
+  }
 
 
-      if (
-        !validThemes.includes(theme)
-      ) {
-        theme = "pink";
-      }
+  /* =========================================================
+     UTF-8 BASE64 DECODER
+     ========================================================= */
 
+  function decodeBase64UTF8(value) {
 
-      element.classList.remove(
-        "theme-pink",
-        "theme-blue",
-        "theme-purple",
-        "theme-cream"
-      );
+    let base64 = String(value || "")
+      .trim()
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .replace(/\s/g, "");
 
-
-      element.classList.add(
-        `theme-${theme}`
-      );
-
+    while (base64.length % 4 !== 0) {
+      base64 += "=";
     }
 
+    const binary = atob(base64);
 
-    /* =======================================================
-       MUSIC NAME
-       ======================================================= */
+    const bytes = new Uint8Array(binary.length);
 
-    function getMusicServiceName(
-      url
-    ) {
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
 
-      if (!url) {
-        return "";
-      }
+    if (typeof TextDecoder !== "undefined") {
+      return new TextDecoder("utf-8", {
+        fatal: true
+      }).decode(bytes);
+    }
+
+    let result = "";
+
+    for (let i = 0; i < bytes.length; i++) {
+      result += String.fromCharCode(bytes[i]);
+    }
+
+    return decodeURIComponent(
+      escape(result)
+    );
+  }
 
 
-      try {
+  /* =========================================================
+     DECODE SHARE DATA
+     ========================================================= */
 
-        const parsed =
-          new URL(url);
+  function decodeShareData(raw) {
 
-        const host =
-          parsed.hostname.toLowerCase();
+    if (!raw) {
+      return null;
+    }
 
+    let value = String(raw).trim();
+
+    /*
+      กรณี URL ถูก encode เช่น
+      %7B%22r%22%3A...
+    */
+
+    try {
+
+      if (value.includes("%")) {
+        const decodedURL = decodeURIComponent(value);
 
         if (
-          host.includes("youtube.com") ||
-          host.includes("youtu.be")
+          decodedURL.startsWith("{") ||
+          decodedURL.startsWith("[")
         ) {
-
-          return "เพลงจาก YouTube";
-
+          value = decodedURL;
         }
-
-
-        if (
-          host.includes("spotify.com")
-        ) {
-
-          return "เพลงจาก Spotify";
-
-        }
-
-
-        return "เพลงของเรา";
-
-      } catch {
-
-        return "เพลงของเรา";
-
       }
 
+    } catch (error) {
+      // ปล่อยให้ลองวิธีอื่นต่อ
     }
 
 
-    /* =======================================================
-       UTF-8 BASE64 DECODE
-       ======================================================= */
+    /*
+      ถ้าเป็น JSON ตรง ๆ
+    */
 
-    function decodeBase64Utf8(
-      encoded
-    ) {
-
-      let value =
-        String(encoded || "")
-          .trim();
-
-
-      if (!value) {
-        throw new Error(
-          "ไม่มีข้อมูล Base64"
-        );
-      }
-
-
-      /*
-       * รองรับ Base64URL
-       *
-       * - -> +
-       * _ -> /
-       */
-
-      value =
-        value
-          .replace(/-/g, "+")
-          .replace(/_/g, "/")
-          .replace(/\s/g, "");
-
-
-      /*
-       * เติม =
-       * ให้จำนวนตัวอักษรหาร 4 ลงตัว
-       */
-
-      while (
-        value.length % 4 !== 0
-      ) {
-
-        value += "=";
-
-      }
-
-
-      /*
-       * แปลง Base64 -> binary
-       */
-
-      const binary =
-        window.atob(value);
-
-
-      /*
-       * binary -> Uint8Array
-       */
-
-      const bytes =
-        new Uint8Array(
-          binary.length
-        );
-
-
-      for (
-        let i = 0;
-        i < binary.length;
-        i++
-      ) {
-
-        bytes[i] =
-          binary.charCodeAt(i);
-
-      }
-
-
-      /*
-       * Uint8Array -> UTF-8 text
-       */
-
-      const decoder =
-        new TextDecoder(
-          "utf-8",
-          {
-            fatal: true
-          }
-        );
-
-
-      return decoder.decode(
-        bytes
-      );
-
-    }
-
-
-    /* =======================================================
-       DECODE SHARE DATA
-       ======================================================= */
-
-    function decodeShareData(
-      encoded
-    ) {
-
-      if (!encoded) {
-
-        throw new Error(
-          "ไม่มีข้อมูลการ์ด"
-        );
-
-      }
-
-
-      let value =
-        String(encoded)
-          .trim();
-
-
-      /*
-       * -----------------------------------------------
-       * 1. ลอง URL decode ก่อน
-       * -----------------------------------------------
-       */
-
-      if (
-        value.includes("%")
-      ) {
-
-        try {
-
-          value =
-            decodeURIComponent(
-              value
-            );
-
-        } catch {
-
-          /*
-           * ถ้า decode ไม่ได้
-           * ใช้ค่าเดิมต่อ
-           */
-
-        }
-
-      }
-
-
-      /*
-       * -----------------------------------------------
-       * 2. ถ้าเป็น JSON โดยตรง
-       * -----------------------------------------------
-       */
+    try {
 
       if (
         value.startsWith("{") &&
         value.endsWith("}")
       ) {
-
-        try {
-
-          const data =
-            JSON.parse(value);
-
-
-          if (
-            data &&
-            typeof data === "object"
-          ) {
-
-            return data;
-
-          }
-
-        } catch {
-
-          /*
-           * ไม่ใช่ JSON
-           */
-
-        }
-
+        return JSON.parse(value);
       }
 
-
-      /*
-       * -----------------------------------------------
-       * 3. Base64 / Base64URL
-       * -----------------------------------------------
-       */
-
-      try {
-
-        const json =
-          decodeBase64Utf8(
-            value
-          );
-
-
-        const data =
-          JSON.parse(json);
-
-
-        if (
-          data &&
-          typeof data === "object"
-        ) {
-
-          return data;
-
-        }
-
-
-      } catch (error) {
-
-        console.error(
-          "Base64 decode error:",
-          error
-        );
-
-      }
-
-
-      throw new Error(
-        "ข้อมูลการ์ดไม่ถูกต้อง"
-      );
-
+    } catch (error) {
+      // ลอง Base64 ต่อ
     }
 
 
-    /* =======================================================
-       RENDER GALLERY
-       ======================================================= */
+    /*
+      Base64 UTF-8
+    */
 
-    function renderGallery() {
+    try {
 
-      const gallery =
-        $("gallery");
+      const jsonText = decodeBase64UTF8(value);
 
+      return JSON.parse(jsonText);
 
-      if (!gallery) {
-        return;
-      }
-
-
-      gallery.innerHTML = "";
-
-
-      GITHUB_IMAGES.forEach(
-        (src, index) => {
-
-          const img =
-            document.createElement(
-              "img"
-            );
-
-
-          img.src = src;
-
-
-          img.alt =
-            `รูปภาพในการ์ด ${index + 1}`;
-
-
-          img.loading =
-            "lazy";
-
-
-          img.onerror =
-            () => {
-
-              img.style.display =
-                "none";
-
-            };
-
-
-          gallery.appendChild(
-            img
-          );
-
-        }
+    } catch (error) {
+      console.error(
+        "ไม่สามารถถอดรหัสข้อมูลการ์ดได้:",
+        error
       );
-
     }
 
 
-    /* =======================================================
-       RENDER MUSIC
-       ======================================================= */
+    /*
+      ลอง decodeURIComponent + Base64
+    */
 
-    function renderMusic() {
+    try {
 
-      const player =
-        $("musicPlayer");
+      const decodedValue = decodeURIComponent(value);
 
-      const name =
-        $("musicName");
+      const jsonText = decodeBase64UTF8(decodedValue);
 
-      const link =
-        $("musicLink");
+      return JSON.parse(jsonText);
 
-
-      if (!player) {
-        return;
-      }
-
-
-      /*
-       * ไม่มีเพลง
-       */
-
-      if (!state.music) {
-
-        player.classList.add(
-          "hidden"
-        );
-
-        return;
-
-      }
-
-
-      /*
-       * มีเพลง
-       */
-
-      if (name) {
-
-        name.textContent =
-          state.musicName ||
-          getMusicServiceName(
-            state.music
-          );
-
-      }
-
-
-      if (link) {
-
-        link.href =
-          state.music;
-
-        link.target =
-          "_blank";
-
-        link.rel =
-          "noopener noreferrer";
-
-      }
-
-
-      player.classList.remove(
-        "hidden"
+    } catch (error) {
+      console.error(
+        "ไม่สามารถถอดรหัสข้อมูลการ์ดได้:",
+        error
       );
-
     }
 
-
-    /* =======================================================
-       RENDER FULL CARD
-       ======================================================= */
-
-    function renderFullCard() {
-
-      const title =
-        $("cardTitle");
-
-      const recipient =
-        $("cardRecipient");
-
-      const message =
-        $("cardMessage");
-
-      const sender =
-        $("cardSender");
-
-      const fullCard =
-        $("fullCard");
+    return null;
+  }
 
 
-      /*
-       * TITLE
-       */
+  /* =========================================================
+     NORMALIZE DATA
+     ========================================================= */
 
-      if (title) {
+  function normalizeCardData(data) {
 
-        title.textContent =
-          state.title ||
-          "Happy Birthday!";
-
-      }
-
-
-      /*
-       * RECIPIENT
-       */
-
-      if (recipient) {
-
-        recipient.textContent =
-          state.recipient ||
-          "";
-
-      }
-
-
-      /*
-       * MESSAGE
-       */
-
-      if (message) {
-
-        message.textContent =
-          state.message ||
-          "";
-
-      }
-
-
-      /*
-       * SENDER
-       */
-
-      if (sender) {
-
-        sender.textContent =
-          state.sender
-            ? `— ${state.sender} —`
-            : "— ด้วยความรักและความปรารถนาดี —";
-
-      }
-
-
-      /*
-       * THEME
-       */
-
-      applyTheme(
-        fullCard,
-        state.theme
-      );
-
-
-      /*
-       * GALLERY
-       */
-
-      renderGallery();
-
-
-      /*
-       * MUSIC
-       */
-
-      renderMusic();
-
+    if (!data || typeof data !== "object") {
+      return {
+        ...DEFAULT_DATA
+      };
     }
 
+    return {
 
-    /* =======================================================
-       ERROR DISPLAY
-       ======================================================= */
+      /*
+        รองรับทั้งรูปแบบใหม่แบบสั้น
 
-    function showError(
-      message
+        r = recipient
+        t = title
+        m = message
+        s = sender
+        th = theme
+        mu = music
+
+        และรูปแบบชื่อเต็ม
+      */
+
+      recipient:
+        data.r ??
+        data.recipient ??
+        data.to ??
+        DEFAULT_DATA.recipient,
+
+      title:
+        data.t ??
+        data.title ??
+        DEFAULT_DATA.title,
+
+      message:
+        data.m ??
+        data.message ??
+        DEFAULT_DATA.message,
+
+      sender:
+        data.s ??
+        data.sender ??
+        data.from ??
+        DEFAULT_DATA.sender,
+
+      theme:
+        data.th ??
+        data.theme ??
+        DEFAULT_DATA.theme,
+
+      music:
+        data.mu ??
+        data.music ??
+        data.musicUrl ??
+        "",
+
+      musicName:
+        data.musicName ??
+        data.songName ??
+        "เพลงของเรา"
+    };
+  }
+
+
+  /* =========================================================
+     RENDER GALLERY
+     ========================================================= */
+
+  function renderGallery() {
+
+    if (!gallery) return;
+
+    gallery.innerHTML = "";
+
+    GITHUB_IMAGES.forEach((imagePath, index) => {
+
+      const image = document.createElement("img");
+
+      image.src = imagePath;
+
+      image.alt = `รูปภาพความทรงจำ ${index + 1}`;
+
+      image.loading = "lazy";
+
+      image.addEventListener(
+        "error",
+        () => {
+          image.style.display = "none";
+        },
+        { once: true }
+      );
+
+      gallery.appendChild(image);
+    });
+  }
+
+
+  /* =========================================================
+     MUSIC
+     ========================================================= */
+
+  function getMusicServiceName(url) {
+
+    if (!url) {
+      return "เพลงของเรา";
+    }
+
+    const lower = url.toLowerCase();
+
+    if (
+      lower.includes("youtube.com") ||
+      lower.includes("youtu.be")
     ) {
+      return "เพลงจาก YouTube";
+    }
 
-      const title =
-        $("cardTitle");
+    if (lower.includes("spotify.com")) {
+      return "เพลงจาก Spotify";
+    }
 
-      const recipient =
-        $("cardRecipient");
-
-      const cardMessage =
-        $("cardMessage");
-
-      const sender =
-        $("cardSender");
-
-      const musicPlayer =
-        $("musicPlayer");
+    return "เพลงของเรา";
+  }
 
 
-      if (title) {
+  function renderMusic(musicUrl, customName) {
 
-        title.textContent =
-          "Sweet Wishes 💗";
+    if (!musicPlayer || !musicLink || !musicName) {
+      return;
+    }
 
-      }
+    if (!musicUrl) {
 
+      musicPlayer.classList.add("hidden");
 
-      if (recipient) {
+      musicLink.removeAttribute("href");
 
-        recipient.textContent =
-          "";
+      return;
+    }
 
-      }
+    musicPlayer.classList.remove("hidden");
 
+    musicName.textContent =
+      customName ||
+      getMusicServiceName(musicUrl);
 
-      if (cardMessage) {
+    musicLink.href = musicUrl;
 
-        cardMessage.textContent =
-          message;
+    musicLink.target = "_blank";
 
-      }
-
-
-      if (sender) {
-
-        sender.textContent =
-          "";
-
-      }
+    musicLink.rel =
+      "noopener noreferrer";
+  }
 
 
-      if (musicPlayer) {
+  /* =========================================================
+     RENDER CARD
+     ========================================================= */
 
-        musicPlayer.classList.add(
-          "hidden"
-        );
+  function renderCard(data) {
 
-      }
+    const card = normalizeCardData(data);
 
+
+    if (cardTitle) {
+      cardTitle.textContent =
+        card.title || DEFAULT_DATA.title;
     }
 
 
-    /* =======================================================
-       LOAD CARD FROM HASH
-       ======================================================= */
-
-    function loadFromHash() {
-
-      const hash =
-        window.location.hash || "";
-
-
-      console.log(
-        "Sweet Wishes hash:",
-        hash
-      );
-
-
-      /*
-       * ต้องขึ้นต้นด้วย #card=
-       */
-
-      if (
-        !hash.startsWith(
-          "#card="
-        )
-      ) {
-
-        console.log(
-          "ไม่มี #card= ใช้การ์ดเริ่มต้น"
-        );
-
-        return false;
-
-      }
-
-
-      /*
-       * ตัด #card= ออก
-       */
-
-      const encoded =
-        hash
-          .slice(
-            "#card=".length
-          )
-          .trim();
-
-
-      if (!encoded) {
-
-        showError(
-          "ลิงก์การ์ดไม่มีข้อมูล"
-        );
-
-        return true;
-
-      }
-
-
-      try {
-
-        /*
-         * ถอดข้อมูล
-         */
-
-        const payload =
-          decodeShareData(
-            encoded
-          );
-
-
-        console.log(
-          "Sweet Wishes payload:",
-          payload
-        );
-
-
-        /*
-         * ---------------------------------------------
-         * อ่านข้อมูล
-         * ---------------------------------------------
-         */
-
-        state.recipient =
-          typeof payload.r === "string"
-            ? payload.r
-            : "";
-
-
-        state.title =
-          typeof payload.t === "string"
-            ? payload.t
-            : "Happy Birthday!";
-
-
-        state.message =
-          typeof payload.m === "string"
-            ? payload.m
-            : "";
-
-
-        state.sender =
-          typeof payload.s === "string"
-            ? payload.s
-            : "";
-
-
-        /*
-         * THEME
-         */
-
-        const validThemes = [
-          "pink",
-          "blue",
-          "purple",
-          "cream"
-        ];
-
-
-        state.theme =
-          validThemes.includes(
-            payload.th
-          )
-            ? payload.th
-            : "pink";
-
-
-        /*
-         * MUSIC
-         */
-
-        state.music =
-          typeof payload.mu === "string"
-            ? payload.mu
-            : "";
-
-
-        state.musicName =
-          state.music
-            ? getMusicServiceName(
-                state.music
-              )
-            : "";
-
-
-        /*
-         * Render
-         */
-
-        renderFullCard();
-
-
-        /*
-         * เปิดหน้า Card
-         */
-
-        const cardPage =
-          $("cardPage");
-
-
-        if (cardPage) {
-
-          cardPage.classList.add(
-            "active"
-          );
-
-        }
-
-
-        console.log(
-          "เปิดการ์ดสำเร็จ 💗"
-        );
-
-
-        return true;
-
-      } catch (error) {
-
-        console.error(
-          "โหลดการ์ดไม่สำเร็จ:",
-          error
-        );
-
-
-        showError(
-          "ไม่สามารถเปิดการ์ดนี้ได้\n" +
-          "ลิงก์อาจไม่ครบหรือข้อมูลเสียหาย"
-        );
-
-
-        return true;
-
-      }
-
+    if (cardRecipient) {
+      cardRecipient.textContent =
+        card.recipient ||
+        DEFAULT_DATA.recipient;
     }
 
 
-    /* =======================================================
-       BLOW CANDLE EFFECT
-       ======================================================= */
-
-    function createBlowCelebration() {
-
-      const cake =
-        $("cake");
-
-
-      if (!cake) {
-        return;
-      }
-
-
-      const rect =
-        cake.getBoundingClientRect();
-
-
-      const centerX =
-        rect.left +
-        rect.width / 2;
-
-
-      const centerY =
-        rect.top +
-        rect.height * 0.18;
-
-
-      /*
-       * LIGHT BURST
-       */
-
-      const burst =
-        document.createElement(
-          "div"
-        );
-
-
-      burst.className =
-        "blow-burst";
-
-
-      burst.style.left =
-        `${centerX}px`;
-
-
-      burst.style.top =
-        `${centerY}px`;
-
-
-      document.body.appendChild(
-        burst
-      );
-
-
-      setTimeout(
-        () => {
-
-          burst.remove();
-
-        },
-        1100
-      );
-
-
-      /*
-       * HEARTS
-       */
-
-      const hearts = [
-        "❤️",
-        "💕",
-        "💖",
-        "💗",
-        "💓",
-        "💘",
-        "💝",
-        "♥️"
-      ];
-
-
-      for (
-        let i = 0;
-        i < 30;
-        i++
-      ) {
-
-        const heart =
-          document.createElement(
-            "div"
-          );
-
-
-        heart.className =
-          "blow-heart";
-
-
-        heart.textContent =
-          hearts[
-            Math.floor(
-              Math.random() *
-              hearts.length
-            )
-          ];
-
-
-        heart.style.left =
-          `${centerX +
-            (Math.random() - 0.5) *
-            70}px`;
-
-
-        heart.style.top =
-          `${centerY +
-            (Math.random() - 0.5) *
-            35}px`;
-
-
-        heart.style.setProperty(
-          "--size",
-          `${17 +
-            Math.random() * 27}px`
-        );
-
-
-        heart.style.setProperty(
-          "--duration",
-          `${1.9 +
-            Math.random() * 1.8}s`
-        );
-
-
-        heart.style.setProperty(
-          "--x1",
-          `${(Math.random() - 0.5) * 110}px`
-        );
-
-
-        heart.style.setProperty(
-          "--x2",
-          `${(Math.random() - 0.5) * 210}px`
-        );
-
-
-        heart.style.setProperty(
-          "--x3",
-          `${(Math.random() - 0.5) * 330}px`
-        );
-
-
-        heart.style.setProperty(
-          "--x4",
-          `${(Math.random() - 0.5) * 420}px`
-        );
-
-
-        heart.style.setProperty(
-          "--r1",
-          `${(Math.random() - 0.5) * 60}deg`
-        );
-
-
-        heart.style.setProperty(
-          "--r2",
-          `${(Math.random() - 0.5) * 120}deg`
-        );
-
-
-        heart.style.setProperty(
-          "--r3",
-          `${(Math.random() - 0.5) * 180}deg`
-        );
-
-
-        heart.style.setProperty(
-          "--r4",
-          `${(Math.random() - 0.5) * 240}deg`
-        );
-
-
-        document.body.appendChild(
-          heart
-        );
-
-
-        setTimeout(
-          () => {
-
-            heart.remove();
-
-          },
-          4300
-        );
-
-      }
-
-
-      /*
-       * SPARKLES
-       */
-
-      const sparkles = [
-        "✨",
-        "✦",
-        "✧",
-        "⋆",
-        "⭐",
-        "💫"
-      ];
-
-
-      for (
-        let i = 0;
-        i < 22;
-        i++
-      ) {
-
-        const sparkle =
-          document.createElement(
-            "div"
-          );
-
-
-        sparkle.className =
-          "blow-sparkle";
-
-
-        sparkle.textContent =
-          sparkles[
-            Math.floor(
-              Math.random() *
-              sparkles.length
-            )
-          ];
-
-
-        sparkle.style.left =
-          `${centerX +
-            (Math.random() - 0.5) *
-            90}px`;
-
-
-        sparkle.style.top =
-          `${centerY +
-            (Math.random() - 0.5) *
-            40}px`;
-
-
-        sparkle.style.setProperty(
-          "--size",
-          `${12 +
-            Math.random() * 20}px`
-        );
-
-
-        sparkle.style.setProperty(
-          "--duration",
-          `${1.2 +
-            Math.random() * 1.5}s`
-        );
-
-
-        sparkle.style.setProperty(
-          "--x1",
-          `${(Math.random() - 0.5) * 160}px`
-        );
-
-
-        sparkle.style.setProperty(
-          "--x2",
-          `${(Math.random() - 0.5) * 260}px`
-        );
-
-
-        sparkle.style.setProperty(
-          "--x3",
-          `${(Math.random() - 0.5) * 340}px`
-        );
-
-
-        document.body.appendChild(
-          sparkle
-        );
-
-
-        setTimeout(
-          () => {
-
-            sparkle.remove();
-
-          },
-          3200
-        );
-
-      }
-
-
-      /*
-       * BIG HEART
-       */
-
-      const bigHeart =
-        document.createElement(
-          "div"
-        );
-
-
-      bigHeart.className =
-        "blow-big-heart";
-
-
-      bigHeart.textContent =
-        "💖";
-
-
-      bigHeart.style.left =
-        `${centerX}px`;
-
-
-      bigHeart.style.top =
-        `${centerY}px`;
-
-
-      document.body.appendChild(
-        bigHeart
-      );
-
-
-      setTimeout(
-        () => {
-
-          bigHeart.remove();
-
-        },
-        1700
-      );
-
+    if (cardMessage) {
+      cardMessage.textContent =
+        card.message ||
+        DEFAULT_DATA.message;
     }
 
 
-    /* =======================================================
-       CONFETTI
-       ======================================================= */
-
-    function confetti() {
-
-      const symbols = [
-        "🎉",
-        "✨",
-        "💗",
-        "🌸",
-        "⭐"
-      ];
-
-
-      for (
-        let i = 0;
-        i < 28;
-        i++
-      ) {
-
-        const element =
-          document.createElement(
-            "span"
-          );
-
-
-        element.textContent =
-          symbols[
-            Math.floor(
-              Math.random() *
-              symbols.length
-            )
-          ];
-
-
-        element.style.position =
-          "fixed";
-
-
-        element.style.left =
-          `${Math.random() * 100}vw`;
-
-
-        element.style.top =
-          "-30px";
-
-
-        element.style.fontSize =
-          `${14 +
-            Math.random() * 20}px`;
-
-
-        element.style.zIndex =
-          "1000";
-
-
-        element.style.pointerEvents =
-          "none";
-
-
-        const duration =
-          1.5 +
-          Math.random() * 1.5;
-
-
-        element.style.transition =
-          `transform ${duration}s ease,
-           opacity 2s`;
-
-
-        document.body.appendChild(
-          element
-        );
-
-
-        requestAnimationFrame(
-          () => {
-
-            const x =
-              (Math.random() - 0.5) *
-              180;
-
-
-            const y =
-              window.innerHeight +
-              80;
-
-
-            const rotation =
-              Math.random() *
-              700;
-
-
-            element.style.transform =
-              `translate(
-                ${x}px,
-                ${y}px
-              )
-              rotate(
-                ${rotation}deg
-              )`;
-
-
-            element.style.opacity =
-              "0";
-
-          }
-        );
-
-
-        setTimeout(
-          () => {
-
-            element.remove();
-
-          },
-          3500
-        );
-
-      }
-
+    if (cardSender) {
+      cardSender.textContent =
+        card.sender ||
+        DEFAULT_DATA.sender;
     }
 
 
-    /* =======================================================
-       BLOW BUTTON
-       ======================================================= */
+    applyTheme(card.theme);
 
-    const blowBtn =
-      $("blowBtn");
+
+    renderGallery();
+
+
+    renderMusic(
+      card.music,
+      card.musicName
+    );
+
+
+    /*
+      เก็บข้อมูลไว้ใน window
+      เผื่อใช้ตรวจสอบผ่าน Console
+    */
+
+    window.sweetWishesCard = card;
+  }
+
+
+  /* =========================================================
+     SHOW ERROR
+     ========================================================= */
+
+  function showError() {
+
+    if (cardTitle) {
+      cardTitle.textContent =
+        "Sweet Wishes 💗";
+    }
+
+    if (cardRecipient) {
+      cardRecipient.textContent =
+        "มีบางอย่างผิดพลาด";
+    }
+
+    if (cardMessage) {
+      cardMessage.textContent =
+        "ไม่สามารถเปิดข้อมูลการ์ดนี้ได้\n" +
+        "ลองเปิดลิงก์ใหม่อีกครั้งนะ 💗";
+    }
+
+    if (cardSender) {
+      cardSender.textContent =
+        "— Sweet Wishes —";
+    }
+
+    applyTheme("pink");
+
+    renderGallery();
+
+    if (musicPlayer) {
+      musicPlayer.classList.add("hidden");
+    }
+  }
+
+
+  /* =========================================================
+     LOAD CARD FROM URL HASH
+     ========================================================= */
+
+  function loadFromHash() {
+
+    const hash = window.location.hash || "";
+
+    /*
+      ต้องขึ้นต้นด้วย
+
+      #card=
+    */
+
+    if (!hash.startsWith("#card=")) {
+
+      /*
+        ไม่มีข้อมูลการ์ด
+        แสดงการ์ดตัวอย่างแทน
+      */
+
+      renderCard(DEFAULT_DATA);
+
+      return;
+    }
+
+
+    /*
+      สำคัญมาก:
+      ตัดเฉพาะ "#card="
+      ออกจาก URL
+    */
+
+    const encodedData =
+      hash.slice("#card=".length);
+
+
+    if (!encodedData) {
+
+      renderCard(DEFAULT_DATA);
+
+      return;
+    }
+
+
+    const decodedData =
+      decodeShareData(encodedData);
+
+
+    if (!decodedData) {
+
+      console.error(
+        "Card data is invalid:",
+        encodedData
+      );
+
+      showError();
+
+      return;
+    }
+
+
+    console.log(
+      "Sweet Wishes card data:",
+      decodedData
+    );
+
+
+    renderCard(decodedData);
+  }
+
+
+  /* =========================================================
+     BLOW CANDLE
+     ========================================================= */
+
+  function blowCandles() {
+
+    const flames =
+      document.querySelectorAll(".flame");
+
+    if (!flames.length) {
+      return;
+    }
+
+
+    flames.forEach((flame, index) => {
+
+      setTimeout(() => {
+
+        flame.classList.add("blown");
+
+      }, index * 120);
+
+    });
 
 
     if (blowBtn) {
 
-      blowBtn.addEventListener(
-        "click",
-        () => {
+      blowBtn.disabled = true;
 
-          const cake =
-            $("cake");
-
-
-          if (!cake) {
-            return;
-          }
+      blowBtn.textContent =
+        "✨ เป่าเรียบร้อยแล้ว";
+    }
 
 
-          /*
-           * ป้องกันกดซ้ำ
-           */
+    if (blowMessage) {
 
-          if (
-            cake.classList.contains(
-              "blown"
-            )
-          ) {
+      blowMessage.classList.remove("hidden");
 
-            return;
-
-          }
-
-
-          cake.classList.add(
-            "blown"
-          );
-
-
-          const message =
-            $("blowMessage");
-
-
-          if (message) {
-
-            message.classList.remove(
-              "hidden"
-            );
-
-          }
-
-
-          createBlowCelebration();
-
-          confetti();
-
-        }
+      blowMessage.classList.add(
+        "show"
       );
-
     }
 
 
-    /* =======================================================
-       ENCODE SHARE DATA
-       ======================================================= */
-
-    function encodeShareData(
-      data
-    ) {
-
-      const json =
-        JSON.stringify(data);
-
-
-      const bytes =
-        new TextEncoder().encode(
-          json
-        );
-
-
-      let binary = "";
-
-
-      const chunkSize =
-        0x8000;
-
-
-      for (
-        let i = 0;
-        i < bytes.length;
-        i += chunkSize
-      ) {
-
-        binary +=
-          String.fromCharCode(
-            ...bytes.subarray(
-              i,
-              i + chunkSize
-            )
-          );
-
-      }
-
-
-      return window.btoa(
-        binary
-      )
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/g, "");
-
-    }
-
-
-    /* =======================================================
-       CREATE SHARE PAYLOAD
-       ======================================================= */
-
-    function createSharePayload() {
-
-      return encodeShareData({
-
-        /*
-         * ใช้ key แบบเดิม
-         * เพื่อให้ลิงก์เก่ายังใช้ได้
-         */
-
-        r:
-          state.recipient,
-
-        t:
-          state.title,
-
-        m:
-          state.message,
-
-        s:
-          state.sender,
-
-        th:
-          state.theme,
-
-        mu:
-          state.music
-
-      });
-
-    }
-
-
-    /* =======================================================
-       MAKE SHARE URL
-       ======================================================= */
-
-    function makeShareUrl() {
-
-      /*
-       * ใช้ URL ปัจจุบัน
-       * แต่ตัด query ออก
-       */
-
-      const url =
-        new URL(
-          window.location.href
-        );
-
-
-      url.search = "";
-
-
-      url.hash =
-        "card=" +
-        createSharePayload();
-
-
-      return url.toString();
-
-    }
-
-
-    /* =======================================================
-       SHARE BUTTON
-       ======================================================= */
-
-    const shareBtn =
-      $("shareBtn");
-
-
-    if (shareBtn) {
-
-      shareBtn.addEventListener(
-        "click",
-        async () => {
-
-          const url =
-            makeShareUrl();
-
-
-          try {
-
-            await navigator.clipboard
-              .writeText(url);
-
-
-            alert(
-              "คัดลอกลิงก์การ์ดแล้ว 💗"
-            );
-
-
-          } catch {
-
-            window.prompt(
-              "คัดลอกลิงก์นี้:",
-              url
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-
-    /* =======================================================
-       QR CODE
-       ======================================================= */
-
-    const qrBtn =
-      $("qrBtn");
-
-
-    if (qrBtn) {
-
-      qrBtn.addEventListener(
-        "click",
-        () => {
-
-          const url =
-            makeShareUrl();
-
-
-          const box =
-            $("qrcode");
-
-
-          if (!box) {
-            return;
-          }
-
-
-          box.innerHTML = "";
-
-
-          const image =
-            document.createElement(
-              "img"
-            );
-
-
-          image.width = 240;
-          image.height = 240;
-
-
-          image.alt =
-            "QR Code สำหรับเปิดการ์ด";
-
-
-          image.src =
-            "https://api.qrserver.com/v1/create-qr-code/" +
-            "?size=240x240" +
-            "&ecc=M" +
-            "&margin=10" +
-            "&data=" +
-            encodeURIComponent(url);
-
-
-          image.onerror =
-            () => {
-
-              box.innerHTML =
-                "<p>สร้าง QR Code ไม่สำเร็จ กรุณาลองใหม่</p>";
-
-            };
-
-
-          box.appendChild(
-            image
-          );
-
-
-          const warning =
-            $("qrWarning");
-
-
-          if (warning) {
-
-            warning.textContent =
-              "สแกนแล้วจะเปิดการ์ดใบนี้โดยตรง 💗";
-
-          }
-
-
-          const modal =
-            $("qrModal");
-
-
-          if (modal) {
-
-            modal.classList.remove(
-              "hidden"
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-
-    /* =======================================================
-       CLOSE QR
-       ======================================================= */
-
-    const closeQr =
-      $("closeQr");
-
-
-    if (closeQr) {
-
-      closeQr.addEventListener(
-        "click",
-        () => {
-
-          const modal =
-            $("qrModal");
-
-
-          if (modal) {
-
-            modal.classList.add(
-              "hidden"
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-
-    /* =======================================================
-       CLICK OUTSIDE QR
-       ======================================================= */
-
-    const qrModal =
-      $("qrModal");
-
-
-    if (qrModal) {
-
-      qrModal.addEventListener(
-        "click",
-        (event) => {
-
-          if (
-            event.target ===
-            qrModal
-          ) {
-
-            qrModal.classList.add(
-              "hidden"
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-
-    /* =======================================================
-       COPY LINK FROM QR
-       ======================================================= */
-
-    const copyLinkBtn =
-      $("copyLinkBtn");
-
-
-    if (copyLinkBtn) {
-
-      copyLinkBtn.addEventListener(
-        "click",
-        async () => {
-
-          const url =
-            makeShareUrl();
-
-
-          try {
-
-            await navigator.clipboard
-              .writeText(url);
-
-
-            copyLinkBtn.textContent =
-              "คัดลอกแล้ว ✓";
-
-
-            setTimeout(
-              () => {
-
-                copyLinkBtn.textContent =
-                  "🔗 คัดลอกลิงก์";
-
-              },
-              1500
-            );
-
-
-          } catch {
-
-            window.prompt(
-              "คัดลอกลิงก์:",
-              url
-            );
-
-          }
-
-        }
-      );
-
-    }
-
-
-    /* =======================================================
-       PARTICLES
-       ======================================================= */
-
-    function createParticles() {
-
-      const container =
-        $("particles");
-
-
-      if (!container) {
-        return;
-      }
-
-
-      /*
-       * ไม่สร้างเยอะเกินไป
-       * เพื่อให้เว็บเบา
-       */
-
-      const symbols = [
-        "✦",
-        "✧",
-        "♡",
-        "·"
-      ];
-
-
-      for (
-        let i = 0;
-        i < 18;
-        i++
-      ) {
-
-        const particle =
-          document.createElement(
-            "span"
-          );
-
-
-        particle.className =
-          "particle";
-
-
-        particle.textContent =
-          symbols[
-            Math.floor(
-              Math.random() *
-              symbols.length
-            )
-          ];
-
-
-        particle.style.left =
-          `${Math.random() * 100}%`;
-
-
-        particle.style.top =
-          `${Math.random() * 100}%`;
-
-
-        particle.style.fontSize =
-          `${10 +
-            Math.random() * 12}px`;
-
-
-        particle.style.animationDuration =
-          `${8 +
-            Math.random() * 12}s`;
-
-
-        particle.style.animationDelay =
-          `${Math.random() * -10}s`;
-
-
-        container.appendChild(
-          particle
-        );
-
-      }
-
-    }
-
-
-    /* =======================================================
-       INITIALIZE
-       ======================================================= */
-
-    console.log(
-      "Sweet Wishes Card Only เริ่มทำงาน 💗"
-    );
-
-
-    /*
-     * สร้างพื้นหลัง
-     */
-
-    createParticles();
-
-
-    /*
-     * โหลดข้อมูลจาก #card=
-     */
-
-    const openedFromShare =
-      loadFromHash();
-
-
-    /*
-     * ถ้าไม่มีข้อมูลใน URL
-     * ให้แสดงการ์ดเริ่มต้น
-     */
-
-    if (!openedFromShare) {
-
-      renderFullCard();
-
-    }
-
-
-    /* =======================================================
-       HASH CHANGE
-       ======================================================= */
-
-    window.addEventListener(
-      "hashchange",
-      () => {
-
-        loadFromHash();
-
-      }
-    );
-
-
+    createConfetti();
   }
-);
+
+
+  /* =========================================================
+     CONFETTI
+     ========================================================= */
+
+  function createConfetti() {
+
+    const container =
+      document.body;
+
+    const symbols = [
+      "💗",
+      "💖",
+      "💕",
+      "✨",
+      "🎉",
+      "🎂",
+      "🌸",
+      "⭐"
+    ];
+
+
+    for (let i = 0; i < 45; i++) {
+
+      const confetti =
+        document.createElement("span");
+
+      confetti.className =
+        "confetti";
+
+      confetti.textContent =
+        symbols[
+          Math.floor(
+            Math.random() *
+            symbols.length
+          )
+        ];
+
+
+      confetti.style.left =
+        Math.random() * 100 + "vw";
+
+      confetti.style.animationDelay =
+        Math.random() * 0.8 + "s";
+
+      confetti.style.animationDuration =
+        2.5 +
+        Math.random() * 2 +
+        "s";
+
+
+      container.appendChild(confetti);
+
+
+      setTimeout(() => {
+
+        confetti.remove();
+
+      }, 5000);
+    }
+  }
+
+
+  /* =========================================================
+     PARTICLES
+     ========================================================= */
+
+  function createParticles() {
+
+    if (!particles) {
+      return;
+    }
+
+    particles.innerHTML = "";
+
+
+    const symbols = [
+      "♡",
+      "♥",
+      "✦",
+      "✧",
+      "•"
+    ];
+
+
+    for (let i = 0; i < 24; i++) {
+
+      const particle =
+        document.createElement("span");
+
+      particle.className =
+        "particle";
+
+      particle.textContent =
+        symbols[
+          Math.floor(
+            Math.random() *
+            symbols.length
+          )
+        ];
+
+
+      particle.style.left =
+        Math.random() * 100 + "%";
+
+      particle.style.top =
+        Math.random() * 100 + "%";
+
+      particle.style.animationDelay =
+        Math.random() * 4 + "s";
+
+      particle.style.animationDuration =
+        3 +
+        Math.random() * 4 +
+        "s";
+
+      particle.style.opacity =
+        0.2 +
+        Math.random() * 0.5;
+
+
+      particles.appendChild(
+        particle
+      );
+    }
+  }
+
+
+  /* =========================================================
+     BLOW BUTTON EVENT
+     ========================================================= */
+
+  if (blowBtn) {
+
+    blowBtn.addEventListener(
+      "click",
+      blowCandles
+    );
+  }
+
+
+  /* =========================================================
+     INITIALIZE
+     ========================================================= */
+
+  createParticles();
+
+  loadFromHash();
+
+
+  /* =========================================================
+     HASH CHANGE
+     ========================================================= */
+
+  window.addEventListener(
+    "hashchange",
+    () => {
+
+      /*
+        รีเซ็ตปุ่มเป่าเทียน
+      */
+
+      if (blowBtn) {
+
+        blowBtn.disabled = false;
+
+        blowBtn.textContent =
+          "🌬️ เป่าเทียน";
+      }
+
+
+      if (blowMessage) {
+
+        blowMessage.classList.add(
+          "hidden"
+        );
+
+        blowMessage.classList.remove(
+          "show"
+        );
+      }
+
+
+      /*
+        โหลดข้อมูลการ์ดใหม่
+      */
+
+      loadFromHash();
+    }
+  );
+
+});
