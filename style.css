@@ -74,3 +74,293 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
   text-decoration: none;
   margin-top: 10px;
 }
+/* ==================================================
+   FIX BLOW CANDLE HEART EFFECT
+   ================================================== */
+
+.blow-heart {
+  position: fixed !important;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 9999;
+
+  line-height: 1;
+
+  opacity: 1;
+
+  transform: translate(-50%, -50%) scale(1);
+
+  animation:
+    blowHeartRise
+    var(--duration, 3s)
+    cubic-bezier(.18, .75, .25, 1)
+    forwards;
+
+  will-change: transform, opacity;
+}
+
+
+/* ห้ามใช้ left/top ใน keyframe */
+@keyframes blowHeartRise {
+
+  0% {
+    opacity: 1;
+
+    transform:
+      translate(
+        calc(-50% + 0px),
+        calc(-50% + 0px)
+      )
+      scale(.6)
+      rotate(0deg);
+  }
+
+  20% {
+    opacity: 1;
+
+    transform:
+      translate(
+        calc(-50% + var(--x1)),
+        calc(-50% - 45px)
+      )
+      scale(1)
+      rotate(var(--r1));
+  }
+
+  55% {
+    opacity: .95;
+
+    transform:
+      translate(
+        calc(-50% + var(--x2)),
+        calc(-50% - 150px)
+      )
+      scale(1.05)
+      rotate(var(--r2));
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(
+        calc(-50% + var(--x3)),
+        calc(-50% - 350px)
+      )
+      scale(.7)
+      rotate(var(--r3));
+  }
+
+}
+
+
+/* ==================================================
+   SPARKLE
+   ================================================== */
+
+.blow-sparkle {
+  position: fixed !important;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 10000;
+
+  line-height: 1;
+
+  opacity: 1;
+
+  transform: translate(-50%, -50%);
+
+  animation:
+    blowSparkleRise
+    var(--duration, 2s)
+    ease-out
+    forwards;
+
+  will-change: transform, opacity;
+}
+
+
+@keyframes blowSparkleRise {
+
+  0% {
+    opacity: 1;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(.5)
+      rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      translate(
+        calc(-50% + var(--x)),
+        calc(-50% - 100px)
+      )
+      scale(1.2)
+      rotate(90deg);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(
+        calc(-50% + var(--x2)),
+        calc(-50% - 260px)
+      )
+      scale(.7)
+      rotate(180deg);
+  }
+
+}
+
+
+/* ==================================================
+   BIG HEART
+   ================================================== */
+
+.blow-big-heart {
+  position: fixed !important;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 10001;
+
+  font-size: 46px;
+
+  line-height: 1;
+
+  transform:
+    translate(-50%, -50%)
+    scale(.3);
+
+  opacity: 0;
+
+  animation:
+    blowBigHeart
+    1.5s
+    cubic-bezier(.16, 1.2, .3, 1)
+    forwards;
+}
+
+
+@keyframes blowBigHeart {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(.3);
+  }
+
+  25% {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1.2);
+  }
+
+  60% {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -90%)
+      scale(1);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -180%)
+      scale(.7);
+  }
+
+}
+
+
+/* ==================================================
+   LIGHT BURST
+   ================================================== */
+
+.blow-burst {
+  position: fixed !important;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  z-index: 9998;
+
+  transform:
+    translate(-50%, -50%)
+    scale(.2);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.95) 0%,
+      rgba(255,190,220,.5) 35%,
+      rgba(255,150,200,.15) 65%,
+      transparent 75%
+    );
+
+  box-shadow:
+    0 0 18px rgba(255,150,190,.55),
+    0 0 45px rgba(255,190,220,.4),
+    0 0 80px rgba(255,220,235,.25);
+
+  animation:
+    blowBurst
+    1s
+    ease-out
+    forwards;
+}
+
+
+@keyframes blowBurst {
+
+  0% {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      scale(.2);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(5);
+  }
+
+}
+
+
+/* มือถือ */
+
+@media (max-width: 520px) {
+
+  .blow-big-heart {
+    font-size: 38px;
+  }
+
+}
