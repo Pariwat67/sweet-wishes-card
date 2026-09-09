@@ -1,177 +1,170 @@
 <!DOCTYPE html>
+
 <html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="เว็บการ์ดอวยพรวันเกิดแบบสร้างเอง พร้อมรูป เพลง เค้ก และ QR Code">
+
+  <meta name="description" content="Sweet Wishes - การ์ดอวยพร">
+
   <title>Sweet Wishes 🎂</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=Itim&family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
   <div id="particles"></div>
 
-  <header class="topbar">
-    <div class="brand">🎂 Sweet Wishes</div>
-    <div class="top-actions">
-      <button class="ghost-btn" id="loadDemoBtn">ตัวอย่าง</button>
-      <button class="primary-btn small" id="createTopBtn">สร้างการ์ด</button>
-    </div>
-  </header>
-
   <main>
-    <!-- LANDING -->
-    <section id="landing" class="page active">
-      <div class="hero">
-        <div class="hero-cake">🎂</div>
-        <p class="eyebrow">A little card made with love</p>
-        <h1>สร้างการ์ดอวยพร<br><span>ที่มีเรื่องราวของคุณ</span></h1>
-        <p class="hero-text">ใส่คำอวยพร รูปภาพ เพลง และเค้ก แล้วส่งให้คนพิเศษผ่าน QR Code ได้เลย 💗</p>
-        <button class="primary-btn big" id="startBtn">🎁 เริ่มสร้างการ์ด</button>
-      </div>
 
-      <div class="feature-grid">
-        <article><span>💌</span><h3>ข้อความ</h3><p>เขียนคำอวยพรในแบบของคุณ</p></article>
-        <article><span>📸</span><h3>รูปภาพ</h3><p>เพิ่มความทรงจำที่อยากเก็บไว้</p></article>
-        <article><span>🎵</span><h3>เพลง</h3><p>เลือกเพลงประกอบการ์ด</p></article>
-        <article><span>🎂</span><h3>เค้ก</h3><p>เป่าเทียนพร้อมคำอวยพร</p></article>
-        <article><span>📱</span><h3>QR Code</h3><p>เปิดการ์ดบนมือถือได้</p></article>
-      </div>
-    </section>
+```
+<!-- CARD -->
+<section id="cardPage" class="page active">
 
-    <!-- CREATOR -->
-    <section id="creator" class="page">
-      <div class="section-heading">
-        <button class="back-btn" id="backBtn">← กลับ</button>
-        <div>
-          <p class="eyebrow">CREATE YOUR CARD</p>
-          <h2>สร้างการ์ดของคุณ</h2>
-        </div>
-      </div>
+  <div class="card-toolbar">
+    <button class="ghost-btn" id="shareBtn">🔗 แชร์</button>
+    <button class="ghost-btn" id="qrBtn">📱 QR Code</button>
+  </div>
 
-      <div class="creator-layout">
-        <form id="cardForm" class="editor">
-          <div class="form-group">
-            <label for="recipient">ชื่อคนรับ 💗</label>
-            <input id="recipient" type="text" maxlength="40" placeholder="เช่น มินนี่" required>
-          </div>
+  <div id="fullCard" class="full-card theme-pink">
 
-          <div class="form-group">
-            <label for="titleInput">หัวข้อการ์ด</label>
-            <input id="titleInput" type="text" maxlength="60" placeholder="Happy Birthday!">
-          </div>
+    <div class="sparkles">
+      ✦　✧　✦　✧　✦
+    </div>
 
-          <div class="form-group">
-            <label for="message">คำอวยพร ✨</label>
-            <textarea id="message" rows="6" maxlength="500" placeholder="ขอให้มีความสุขมาก ๆ..."></textarea>
-          </div>
+    <p class="card-kicker">
+      A SPECIAL WISH FOR YOU
+    </p>
 
-          <div class="form-group">
-            <label for="sender">จากใคร</label>
-            <input id="sender" type="text" maxlength="40" placeholder="จาก โอห์ม">
-          </div>
+    <h1 id="cardTitle">
+      Happy Birthday!
+    </h1>
 
-          <div class="form-group">
-            <label>ธีม</label>
-            <div class="theme-grid">
-              <button type="button" class="theme-option selected" data-theme="pink">🌸 ชมพู</button>
-              <button type="button" class="theme-option" data-theme="blue">🌊 ฟ้า</button>
-              <button type="button" class="theme-option" data-theme="purple">🔮 ม่วง</button>
-              <button type="button" class="theme-option" data-theme="cream">🍰 ครีม</button>
-            </div>
-          </div>
+    <div class="recipient-name" id="cardRecipient">
+      ชื่อคนรับ
+    </div>
 
-          <div class="form-group">
-            <label for="imageInput">รูปภาพ 📸</label>
-            <input id="imageInput" type="file" accept="image/*" multiple>
-            <small>แนะนำไม่เกิน 6 รูป และรูปละไม่เกินประมาณ 2 MB</small>
-            <div id="imageList" class="upload-list"></div>
-          </div>
+    <!-- CAKE -->
+    <div class="cake-stage">
 
-          <div class="form-group">
-            <label for="musicInput">เพลง 🎵</label>
-            <input id="musicInput" type="url" placeholder="วางลิงก์ YouTube หรือ Spotify ที่นี่">
-            <small>วางลิงก์เพลงจาก YouTube หรือ Spotify ได้เลย 🎧</small>
-            <div id="musicInfo" class="file-info">ยังไม่ได้ใส่ลิงก์เพลง</div>
-          </div>
+      <div id="cake" class="cake" aria-label="เค้กวันเกิด">
 
-          <div class="form-actions">
-            <button type="button" class="secondary-btn" id="previewBtn">👀 ดูตัวอย่าง</button>
-            <button type="submit" class="primary-btn">💌 สร้างการ์ด</button>
-          </div>
-        </form>
-
-        <aside class="live-preview">
-          <p class="preview-label">LIVE PREVIEW</p>
-          <div id="miniCard" class="mini-card theme-pink">
-            <div class="mini-decor">✦ ✧ ✦</div>
-            <div class="mini-cake">🎂</div>
-            <h3 id="miniTitle">Happy Birthday!</h3>
-            <div id="miniRecipient">ชื่อคนรับ</div>
-            <p id="miniMessage">คำอวยพรของคุณจะปรากฏตรงนี้...</p>
-            <span id="miniSender">— จากใคร —</span>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- CARD -->
-    <section id="cardPage" class="page">
-      <div class="card-toolbar">
-        <button class="ghost-btn" id="editBtn">✏️ แก้ไข</button>
-        <button class="ghost-btn" id="shareBtn">🔗 แชร์</button>
-        <button class="ghost-btn" id="qrBtn">📱 QR Code</button>
-      </div>
-
-      <div id="fullCard" class="full-card theme-pink">
-        <div class="sparkles">✦　✧　✦　✧　✦</div>
-        <p class="card-kicker">A SPECIAL WISH FOR YOU</p>
-        <h1 id="cardTitle">Happy Birthday!</h1>
-        <div class="recipient-name" id="cardRecipient">ชื่อคนรับ</div>
-
-        <div class="cake-stage">
-          <div id="cake" class="cake" aria-label="เค้กวันเกิด">
-            <div class="flame-row">
-              <span class="flame">🔥</span><span class="flame">🔥</span><span class="flame">🔥</span>
-            </div>
-            <div class="candles"><i></i><i></i><i></i></div>
-            <div class="cake-top">🍓　🍓　🍓</div>
-            <div class="cake-body">🎂</div>
-          </div>
-          <button id="blowBtn" class="secondary-btn">🌬️ เป่าเทียน</button>
-          <p id="blowMessage" class="hidden">✨ ขอให้คำอวยพรเป็นจริงทุกอย่างเลยนะ! ✨</p>
+        <div class="flame-row">
+          <span class="flame">🔥</span>
+          <span class="flame">🔥</span>
+          <span class="flame">🔥</span>
         </div>
 
-        <div class="message-box">
-          <p id="cardMessage">ขอให้มีความสุขมาก ๆ...</p>
+        <div class="candles">
+          <i></i>
+          <i></i>
+          <i></i>
         </div>
 
-        <div id="gallery" class="gallery"></div>
-
-        <div id="musicPlayer" class="music-player hidden">
-          <div>🎵 <span id="musicName">เพลงของเรา</span></div>
-          <a id="musicLink" class="primary-btn music-link" href="#" target="_blank" rel="noopener noreferrer">▶️ เปิดเพลง</a>
+        <div class="cake-top">
+          🍓　🍓　🍓
         </div>
 
-        <p class="sender" id="cardSender">— จากใคร —</p>
-        <div class="card-footer">Made with 💗</div>
+        <div class="cake-body">
+          🎂
+        </div>
+
       </div>
 
-      <div id="qrModal" class="modal hidden">
-        <div class="modal-box">
-          <button class="close-btn" id="closeQr">×</button>
-          <h2>📱 สแกนเพื่อเปิดการ์ด</h2>
-          <div id="qrcode"></div>
-          <p>นำกล้องมือถือสแกน QR Code นี้</p>
-          <button class="primary-btn" id="copyLinkBtn">🔗 คัดลอกลิงก์</button>
-          <small id="qrWarning"></small>
-        </div>
+      <button id="blowBtn" class="secondary-btn">
+        🌬️ เป่าเทียน
+      </button>
+
+      <p id="blowMessage" class="hidden">
+        ✨ ขอให้คำอวยพรเป็นจริงทุกอย่างเลยนะ! ✨
+      </p>
+
+    </div>
+
+    <!-- MESSAGE -->
+    <div class="message-box">
+      <p id="cardMessage">
+        ขอให้มีความสุขมาก ๆ...
+      </p>
+    </div>
+
+    <!-- GALLERY -->
+    <div id="gallery" class="gallery"></div>
+
+    <!-- MUSIC -->
+    <div id="musicPlayer" class="music-player hidden">
+
+      <div>
+        🎵
+        <span id="musicName">
+          เพลงของเรา
+        </span>
       </div>
-    </section>
+
+      <a
+        id="musicLink"
+        class="primary-btn music-link"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ▶️ เปิดเพลง
+      </a>
+
+    </div>
+
+    <!-- SENDER -->
+    <p class="sender" id="cardSender">
+      — จากใคร —
+    </p>
+
+    <div class="card-footer">
+      Made with 💗
+    </div>
+
+  </div>
+
+  <!-- QR MODAL -->
+  <div id="qrModal" class="modal hidden">
+
+    <div class="modal-box">
+
+      <button class="close-btn" id="closeQr">
+        ×
+      </button>
+
+      <h2>
+        📱 สแกนเพื่อเปิดการ์ด
+      </h2>
+
+      <div id="qrcode"></div>
+
+      <p>
+        นำกล้องมือถือสแกน QR Code นี้
+      </p>
+
+      <button class="primary-btn" id="copyLinkBtn">
+        🔗 คัดลอกลิงก์
+      </button>
+
+      <small id="qrWarning"></small>
+
+    </div>
+
+  </div>
+
+</section>
+```
+
   </main>
 
   <script src="script.js"></script>
+
 </body>
 </html>
