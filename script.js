@@ -1,21 +1,24 @@
 /* =========================================================
    SWEET WISHES - SCRIPT.JS
-   Fixed Version
+   GitHub Images Version
    ========================================================= */
 
 "use strict";
 
-/* =========================================================
-   START AFTER HTML LOAD
-   ========================================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =======================================================
-     HELPER
-     ======================================================= */
-
   const $ = (id) => document.getElementById(id);
+
+  /* =========================================================
+     GITHUB IMAGES
+     เปลี่ยนชื่อไฟล์ตรงนี้ให้ตรงกับไฟล์ในโฟลเดอร์ images
+     ========================================================= */
+
+  const GITHUB_IMAGES = [
+    "images/photo1.jpg",
+    "images/photo2.jpg",
+    "images/photo3.jpg"
+  ];
 
   const state = {
     recipient: "",
@@ -23,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     message: "",
     sender: "",
     theme: "pink",
-    images: [],
+    images: [...GITHUB_IMAGES],
     music: null,
     musicName: ""
   };
@@ -33,17 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let imageFiles = [];
   let musicUrl = "";
 
-
-  /* =======================================================
-     PAGE
-     ======================================================= */
-
   const pages = {
     landing: $("landing"),
     creator: $("creator"),
     card: $("cardPage")
   };
 
+  /* =========================================================
+     PAGE
+     ========================================================= */
 
   function showPage(name) {
 
@@ -63,10 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-  /* =======================================================
+  /* =========================================================
      THEME
-     ======================================================= */
+     ========================================================= */
 
   function applyTheme(element, theme) {
 
@@ -93,10 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
     element.classList.add(`theme-${theme}`);
   }
 
-
-  /* =======================================================
+  /* =========================================================
      PREVIEW
-     ======================================================= */
+     ========================================================= */
 
   function updatePreview() {
 
@@ -125,11 +124,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (miniSender) {
-      const sender = $("sender")?.value || "";
 
-      miniSender.textContent = sender
-        ? `— ${sender} —`
-        : "— จากใคร —";
+      const sender =
+        $("sender")?.value || "";
+
+      miniSender.textContent =
+        sender
+          ? `— ${sender} —`
+          : "— จากใคร —";
     }
 
     applyTheme(
@@ -138,33 +140,23 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  ["recipient", "titleInput", "message", "sender"]
+    .forEach(id => {
 
-  /* =======================================================
-     FORM INPUT
-     ======================================================= */
+      const input = $(id);
 
-  [
-    "recipient",
-    "titleInput",
-    "message",
-    "sender"
-  ].forEach(id => {
+      if (input) {
+        input.addEventListener(
+          "input",
+          updatePreview
+        );
+      }
 
-    const input = $(id);
+    });
 
-    if (input) {
-      input.addEventListener(
-        "input",
-        updatePreview
-      );
-    }
-
-  });
-
-
-  /* =======================================================
-     THEME BUTTON
-     ======================================================= */
+  /* =========================================================
+     THEME BUTTONS
+     ========================================================= */
 
   document
     .querySelectorAll(".theme-option")
@@ -176,9 +168,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           document
             .querySelectorAll(".theme-option")
-            .forEach(btn => {
-              btn.classList.remove("selected");
-            });
+            .forEach(btn =>
+              btn.classList.remove("selected")
+            );
 
           button.classList.add("selected");
 
@@ -192,10 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
-  /* =======================================================
-     IMAGE UPLOAD
-     ======================================================= */
+  /* =========================================================
+     IMAGE INPUT
+     ========================================================= */
 
   const imageInput = $("imageInput");
 
@@ -205,18 +196,20 @@ document.addEventListener("DOMContentLoaded", () => {
       "change",
       event => {
 
+        /*
+          ส่วนนี้ยังเก็บไว้สำหรับ preview
+          รูปที่สร้างการ์ดจริงจะใช้ GITHUB_IMAGES
+        */
+
         imageFiles =
           Array.from(
             event.target.files || []
           ).slice(0, 6);
 
         renderImageList();
-
       }
     );
-
   }
-
 
   function renderImageList() {
 
@@ -235,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
         wrap.className =
           "upload-thumb";
 
-
         const img =
           document.createElement("img");
 
@@ -245,17 +237,17 @@ document.addEventListener("DOMContentLoaded", () => {
         img.alt =
           "รูปภาพที่เลือก";
 
-
         const remove =
           document.createElement("button");
 
-        remove.type = "button";
+        remove.type =
+          "button";
 
         remove.className =
           "remove-img";
 
-        remove.textContent = "×";
-
+        remove.textContent =
+          "×";
 
         remove.addEventListener(
           "click",
@@ -267,10 +259,8 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             renderImageList();
-
           }
         );
-
 
         wrap.append(
           img,
@@ -278,15 +268,13 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         list.appendChild(wrap);
-
       }
     );
   }
 
-
-  /* =======================================================
+  /* =========================================================
      MUSIC
-     ======================================================= */
+     ========================================================= */
 
   const musicInput =
     $("musicInput");
@@ -309,12 +297,9 @@ document.addEventListener("DOMContentLoaded", () => {
           musicUrl
             ? `🎵 ${musicUrl}`
             : "ยังไม่ได้ใส่ลิงก์เพลง";
-
       }
     );
-
   }
-
 
   function getMusicServiceName(url) {
 
@@ -326,7 +311,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const host =
         u.hostname.toLowerCase();
 
-
       if (
         host.includes("youtube.com") ||
         host.includes("youtu.be")
@@ -334,27 +318,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return "เพลงจาก YouTube";
       }
 
-
       if (
         host.includes("spotify.com")
       ) {
         return "เพลงจาก Spotify";
       }
 
-
       return "เพลงของเรา";
 
     } catch {
 
       return "เพลงของเรา";
-
     }
   }
 
-
-  /* =======================================================
-     NAVIGATION BUTTONS
-     ======================================================= */
+  /* =========================================================
+     BUTTONS
+     ========================================================= */
 
   const startBtn =
     $("startBtn");
@@ -364,7 +344,6 @@ document.addEventListener("DOMContentLoaded", () => {
       () => showPage("creator");
   }
 
-
   const createTopBtn =
     $("createTopBtn");
 
@@ -372,7 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
     createTopBtn.onclick =
       () => showPage("creator");
   }
-
 
   const backBtn =
     $("backBtn");
@@ -382,7 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
       () => showPage("landing");
   }
 
-
   const editBtn =
     $("editBtn");
 
@@ -391,10 +368,9 @@ document.addEventListener("DOMContentLoaded", () => {
       () => showPage("creator");
   }
 
-
-  /* =======================================================
-     DEMO CARD
-     ======================================================= */
+  /* =========================================================
+     DEMO
+     ========================================================= */
 
   const loadDemoBtn =
     $("loadDemoBtn");
@@ -415,6 +391,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if ($("message")) {
+
           $("message").value =
             "ขอให้วันนี้เต็มไปด้วยรอยยิ้ม\n" +
             "ขอให้ทุกวันที่ผ่านไปมีแต่เรื่องดี ๆ\n" +
@@ -422,13 +399,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if ($("sender")) {
+
           $("sender").value =
             "คนที่อยากเห็นเธอมีความสุข";
         }
 
-
-        state.theme = "pink";
-
+        state.theme =
+          "pink";
 
         document
           .querySelectorAll(".theme-option")
@@ -436,56 +413,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             button.classList.toggle(
               "selected",
-              button.dataset.theme ===
-              "pink"
+              button.dataset.theme === "pink"
             );
 
           });
 
-
         updatePreview();
 
         showPage("creator");
-
       };
-
   }
 
-
-  /* =======================================================
-     FILE -> DATA URL
-     ======================================================= */
-
-  function fileToDataURL(file) {
-
-    return new Promise(
-      (resolve, reject) => {
-
-        const reader =
-          new FileReader();
-
-
-        reader.onload =
-          () => resolve(
-            reader.result
-          );
-
-
-        reader.onerror =
-          reject;
-
-
-        reader.readAsDataURL(file);
-
-      }
-    );
-
-  }
-
-
-  /* =======================================================
-     LOCAL STORAGE
-     ======================================================= */
+  /* =========================================================
+     SAVE CARD
+     ========================================================= */
 
   function saveCard() {
 
@@ -508,23 +449,25 @@ document.addEventListener("DOMContentLoaded", () => {
         theme:
           state.theme,
 
+        /*
+          เก็บ URL รูป GitHub
+          ไม่เก็บ Base64
+        */
+
         images:
-          state.images,
+          [...GITHUB_IMAGES],
 
         music:
           state.music || "",
 
         musicName:
           state.musicName || ""
-
       };
-
 
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
       );
-
 
     } catch (error) {
 
@@ -532,11 +475,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "ไม่สามารถบันทึกการ์ดลงเครื่องได้:",
         error
       );
-
     }
-
   }
 
+  /* =========================================================
+     LOAD SAVED CARD
+     ========================================================= */
 
   function loadSavedCard() {
 
@@ -547,21 +491,17 @@ document.addEventListener("DOMContentLoaded", () => {
           STORAGE_KEY
         );
 
-
       if (!raw) {
         return false;
       }
 
-
       const data =
         JSON.parse(raw);
-
 
       if ($("recipient")) {
         $("recipient").value =
           data.recipient || "";
       }
-
 
       if ($("titleInput")) {
         $("titleInput").value =
@@ -569,49 +509,43 @@ document.addEventListener("DOMContentLoaded", () => {
           "Happy Birthday!";
       }
 
-
       if ($("message")) {
         $("message").value =
           data.message || "";
       }
-
 
       if ($("sender")) {
         $("sender").value =
           data.sender || "";
       }
 
-
       state.recipient =
         data.recipient || "";
-
 
       state.title =
         data.title ||
         "Happy Birthday!";
 
-
       state.message =
         data.message || "";
-
 
       state.sender =
         data.sender || "";
 
-
       state.theme =
         data.theme || "pink";
 
+      /*
+        สำคัญ:
+        ไม่โหลดรูปจาก localStorage
+        ใช้รูปจาก GitHub โดยตรง
+      */
 
       state.images =
-        Array.isArray(data.images)
-          ? data.images
-          : [];
-
+        [...GITHUB_IMAGES];
 
       state.music =
         data.music || "";
-
 
       state.musicName =
         data.musicName ||
@@ -623,16 +557,13 @@ document.addEventListener("DOMContentLoaded", () => {
             : ""
         );
 
-
       musicUrl =
         state.music;
-
 
       if ($("musicInput")) {
         $("musicInput").value =
           state.music;
       }
-
 
       if ($("musicInfo")) {
 
@@ -640,9 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
           state.music
             ? `🎵 ${state.music}`
             : "ยังไม่ได้ใส่ลิงก์เพลง";
-
       }
-
 
       document
         .querySelectorAll(".theme-option")
@@ -651,19 +580,15 @@ document.addEventListener("DOMContentLoaded", () => {
           button.classList.toggle(
             "selected",
             button.dataset.theme ===
-            state.theme
+              state.theme
           );
-
         });
-
 
       updatePreview();
 
       renderFullCard();
 
-
       return true;
-
 
     } catch (error) {
 
@@ -673,15 +598,12 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       return false;
-
     }
-
   }
 
-
-  /* =======================================================
+  /* =========================================================
      RENDER FULL CARD
-     ======================================================= */
+     ========================================================= */
 
   function renderFullCard() {
 
@@ -690,25 +612,19 @@ document.addEventListener("DOMContentLoaded", () => {
       $("cardTitle").textContent =
         state.title ||
         "Happy Birthday!";
-
     }
-
 
     if ($("cardRecipient")) {
 
       $("cardRecipient").textContent =
         state.recipient || "";
-
     }
-
 
     if ($("cardMessage")) {
 
       $("cardMessage").textContent =
         state.message || "";
-
     }
-
 
     if ($("cardSender")) {
 
@@ -716,15 +632,16 @@ document.addEventListener("DOMContentLoaded", () => {
         state.sender
           ? `— ${state.sender} —`
           : "— ด้วยความรักและความปรารถนาดี —";
-
     }
-
 
     applyTheme(
       $("fullCard"),
       state.theme
     );
 
+    /* =====================================================
+       GITHUB IMAGE GALLERY
+       ===================================================== */
 
     const gallery =
       $("gallery");
@@ -733,26 +650,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
       gallery.innerHTML = "";
 
+      GITHUB_IMAGES.forEach(
+        src => {
 
-      (
-        state.images || []
-      ).forEach(src => {
+          const img =
+            document.createElement("img");
 
-        const img =
-          document.createElement("img");
+          img.src =
+            src;
 
-        img.src = src;
+          img.alt =
+            "รูปภาพในการ์ด";
 
-        img.alt =
-          "รูปภาพในการ์ด";
+          img.loading =
+            "lazy";
 
-
-        gallery.appendChild(img);
-
-      });
-
+          gallery.appendChild(img);
+        }
+      );
     }
 
+    /* =====================================================
+       MUSIC
+       ===================================================== */
 
     const musicPlayer =
       $("musicPlayer");
@@ -763,7 +683,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const musicName =
       $("musicName");
 
-
     if (state.music) {
 
       if (musicName) {
@@ -773,9 +692,7 @@ document.addEventListener("DOMContentLoaded", () => {
           getMusicServiceName(
             state.music
           );
-
       }
-
 
       if (musicLink) {
 
@@ -787,44 +704,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
         musicLink.rel =
           "noopener noreferrer";
-
       }
-
 
       if (musicPlayer) {
 
-        musicPlayer
-          .classList
-          .remove("hidden");
-
+        musicPlayer.classList.remove(
+          "hidden"
+        );
       }
 
     } else {
 
       if (musicPlayer) {
 
-        musicPlayer
-          .classList
-          .add("hidden");
-
+        musicPlayer.classList.add(
+          "hidden"
+        );
       }
-
 
       if (musicLink) {
 
-        musicLink
-          .removeAttribute("href");
-
+        musicLink.removeAttribute(
+          "href"
+        );
       }
-
     }
-
   }
 
-
-  /* =======================================================
+  /* =========================================================
      BUILD CARD
-     ======================================================= */
+     ========================================================= */
 
   async function buildCard() {
 
@@ -832,45 +741,35 @@ document.addEventListener("DOMContentLoaded", () => {
       $("recipient")?.value.trim() ||
       "";
 
-
     state.title =
       $("titleInput")?.value.trim() ||
       "Happy Birthday!";
-
 
     state.message =
       $("message")?.value.trim() ||
       "ขอให้มีความสุขมาก ๆ ในทุกวันนะ 💗";
 
-
     state.sender =
       $("sender")?.value.trim() ||
       "";
-
 
     if ($("cardTitle")) {
 
       $("cardTitle").textContent =
         state.title;
-
     }
-
 
     if ($("cardRecipient")) {
 
       $("cardRecipient").textContent =
         state.recipient;
-
     }
-
 
     if ($("cardMessage")) {
 
       $("cardMessage").textContent =
         state.message;
-
     }
-
 
     if ($("cardSender")) {
 
@@ -878,77 +777,50 @@ document.addEventListener("DOMContentLoaded", () => {
         state.sender
           ? `— ${state.sender} —`
           : "— ด้วยความรักและความปรารถนาดี —";
-
     }
-
 
     applyTheme(
       $("fullCard"),
       state.theme
     );
 
+    /* =====================================================
+       ใช้รูปจาก GitHub
+       ===================================================== */
+
+    state.images =
+      [...GITHUB_IMAGES];
 
     const gallery =
       $("gallery");
-
 
     if (gallery) {
 
       gallery.innerHTML = "";
 
-    }
-
-
-    state.images = [];
-
-
-    /* -------------------------------------------------------
-       IMAGES
-       ------------------------------------------------------- */
-
-    for (
-      const file of imageFiles
-    ) {
-
-      try {
-
-        const data =
-          await fileToDataURL(file);
-
-
-        state.images.push(data);
-
-
-        if (gallery) {
+      state.images.forEach(
+        src => {
 
           const img =
             document.createElement("img");
 
-          img.src = data;
+          img.src =
+            src;
 
           img.alt =
             "รูปภาพในการ์ด";
 
+          img.loading =
+            "lazy";
 
           gallery.appendChild(img);
-
         }
-
-      } catch (error) {
-
-        console.warn(
-          "ไม่สามารถอ่านรูปภาพได้:",
-          error
-        );
-
-      }
-
+      );
     }
 
-
-    /* -------------------------------------------------------
+    /* =====================================================
        MUSIC
-       ------------------------------------------------------- */
+       ===================================================== */
 
     const musicPlayer =
       $("musicPlayer");
@@ -959,28 +831,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const musicName =
       $("musicName");
 
-
     const url =
       musicUrl.trim();
-
 
     if (url) {
 
       state.music =
         url;
 
-
       state.musicName =
-        getMusicServiceName(url);
-
+        getMusicServiceName(
+          url
+        );
 
       if (musicName) {
 
         musicName.textContent =
           state.musicName;
-
       }
-
 
       if (musicLink) {
 
@@ -992,16 +860,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         musicLink.rel =
           "noopener noreferrer";
-
       }
-
 
       if (musicPlayer) {
 
-        musicPlayer
-          .classList
-          .remove("hidden");
-
+        musicPlayer.classList.remove(
+          "hidden"
+        );
       }
 
     } else {
@@ -1012,60 +877,44 @@ document.addEventListener("DOMContentLoaded", () => {
       state.musicName =
         "";
 
-
       if (musicPlayer) {
 
-        musicPlayer
-          .classList
-          .add("hidden");
-
+        musicPlayer.classList.add(
+          "hidden"
+        );
       }
-
 
       if (musicLink) {
 
-        musicLink
-          .removeAttribute("href");
-
+        musicLink.removeAttribute(
+          "href"
+        );
       }
-
     }
-
-
-    /* -------------------------------------------------------
-       RESET CAKE
-       ------------------------------------------------------- */
 
     if ($("cake")) {
 
-      $("cake")
-        .classList
-        .remove("blown");
-
+      $("cake").classList.remove(
+        "blown"
+      );
     }
-
 
     if ($("blowMessage")) {
 
-      $("blowMessage")
-        .classList
-        .add("hidden");
-
+      $("blowMessage").classList.add(
+        "hidden"
+      );
     }
 
-
     saveCard();
-
   }
 
-
-  /* =======================================================
+  /* =========================================================
      PREVIEW BUTTON
-     ======================================================= */
+     ========================================================= */
 
   const previewBtn =
     $("previewBtn");
-
 
   if (previewBtn) {
 
@@ -1075,37 +924,29 @@ document.addEventListener("DOMContentLoaded", () => {
         const recipient =
           $("recipient")?.value.trim();
 
-
         if (!recipient) {
 
           alert(
             "ใส่ชื่อคนรับก่อนนะ 😊"
           );
 
-
           $("recipient")?.focus();
 
           return;
-
         }
-
 
         await buildCard();
 
         showPage("card");
-
       };
-
   }
 
-
-  /* =======================================================
+  /* =========================================================
      FORM SUBMIT
-     ======================================================= */
+     ========================================================= */
 
   const cardForm =
     $("cardForm");
-
 
   if (cardForm) {
 
@@ -1115,10 +956,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.preventDefault();
 
-
         const recipient =
           $("recipient")?.value.trim();
-
 
         if (!recipient) {
 
@@ -1126,23 +965,17 @@ document.addEventListener("DOMContentLoaded", () => {
             "กรุณาใส่ชื่อคนรับ"
           );
 
-
           $("recipient")?.focus();
 
           return;
-
         }
-
 
         await buildCard();
 
         showPage("card");
-
       }
     );
-
   }
-
 
   /* =======================================================
      BLOW CANDLE EFFECT
@@ -1153,64 +986,47 @@ document.addEventListener("DOMContentLoaded", () => {
     const cake =
       $("cake");
 
-
-    if (!cake) {
-      return;
-    }
-
+    if (!cake) return;
 
     const rect =
       cake.getBoundingClientRect();
-
 
     const centerX =
       rect.left +
       rect.width / 2;
 
-
     const centerY =
       rect.top +
       rect.height * 0.18;
 
-
-    /* -------------------------------------------------------
-       LIGHT BURST
-       ------------------------------------------------------- */
+    /* =====================================================
+       BURST
+       ===================================================== */
 
     const burst =
       document.createElement("div");
 
-
     burst.className =
       "blow-burst";
-
 
     burst.style.left =
       `${centerX - 18}px`;
 
-
     burst.style.top =
       `${centerY - 18}px`;
-
 
     document.body.appendChild(
       burst
     );
 
-
     setTimeout(
-      () => {
-
-        burst.remove();
-
-      },
+      () => burst.remove(),
       1000
     );
 
-
-    /* -------------------------------------------------------
+    /* =====================================================
        HEARTS
-       ------------------------------------------------------- */
+       ===================================================== */
 
     const hearts = [
       "❤️",
@@ -1223,7 +1039,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "♥️"
     ];
 
-
     for (
       let i = 0;
       i < 34;
@@ -1233,10 +1048,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const heart =
         document.createElement("div");
 
-
       heart.className =
         "blow-heart";
-
 
       heart.textContent =
         hearts[
@@ -1246,95 +1059,73 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         ];
 
-
       const startX =
         centerX +
-        (
-          Math.random() - 0.5
-        ) * 70;
-
+        (Math.random() - 0.5) *
+        70;
 
       const startY =
         centerY +
-        (
-          Math.random() - 0.5
-        ) * 35;
-
+        (Math.random() - 0.5) *
+        35;
 
       heart.style.left =
         `${startX}px`;
 
-
       heart.style.top =
         `${startY}px`;
 
-
       heart.style.fontSize =
         `${17 + Math.random() * 27}px`;
-
 
       heart.style.setProperty(
         "--duration",
         `${1.9 + Math.random() * 1.8}s`
       );
 
-
       heart.style.setProperty(
         "--x1",
         `${(Math.random() - 0.5) * 110}px`
       );
-
 
       heart.style.setProperty(
         "--x2",
         `${(Math.random() - 0.5) * 210}px`
       );
 
-
       heart.style.setProperty(
         "--x3",
         `${(Math.random() - 0.5) * 330}px`
       );
-
 
       heart.style.setProperty(
         "--r1",
         `${(Math.random() - 0.5) * 60}deg`
       );
 
-
       heart.style.setProperty(
         "--r2",
         `${(Math.random() - 0.5) * 120}deg`
       );
-
 
       heart.style.setProperty(
         "--r3",
         `${(Math.random() - 0.5) * 180}deg`
       );
 
-
       document.body.appendChild(
         heart
       );
 
-
       setTimeout(
-        () => {
-
-          heart.remove();
-
-        },
+        () => heart.remove(),
         4100
       );
-
     }
 
-
-    /* -------------------------------------------------------
+    /* =====================================================
        SPARKLES
-       ------------------------------------------------------- */
+       ===================================================== */
 
     const sparkles = [
       "✨",
@@ -1345,7 +1136,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "💫"
     ];
 
-
     for (
       let i = 0;
       i < 26;
@@ -1355,10 +1145,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const sparkle =
         document.createElement("div");
 
-
       sparkle.className =
         "blow-sparkle";
-
 
       sparkle.textContent =
         sparkles[
@@ -1368,96 +1156,68 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         ];
 
-
       sparkle.style.left =
-        `${centerX +
-          (Math.random() - 0.5) * 90}px`;
-
+        `${centerX + (Math.random() - 0.5) * 90}px`;
 
       sparkle.style.top =
-        `${centerY +
-          (Math.random() - 0.5) * 40}px`;
-
+        `${centerY + (Math.random() - 0.5) * 40}px`;
 
       sparkle.style.fontSize =
         `${12 + Math.random() * 20}px`;
-
 
       sparkle.style.setProperty(
         "--duration",
         `${1.2 + Math.random() * 1.5}s`
       );
 
-
       sparkle.style.setProperty(
         "--x",
         `${(Math.random() - 0.5) * 160}px`
       );
-
 
       sparkle.style.setProperty(
         "--x2",
         `${(Math.random() - 0.5) * 260}px`
       );
 
-
       document.body.appendChild(
         sparkle
       );
 
-
       setTimeout(
-        () => {
-
-          sparkle.remove();
-
-        },
+        () => sparkle.remove(),
         3000
       );
-
     }
 
-
-    /* -------------------------------------------------------
+    /* =====================================================
        BIG HEART
-       ------------------------------------------------------- */
+       ===================================================== */
 
     const bigHeart =
       document.createElement("div");
 
-
     bigHeart.className =
       "blow-big-heart";
-
 
     bigHeart.textContent =
       "💖";
 
-
     bigHeart.style.left =
       `${centerX}px`;
 
-
     bigHeart.style.top =
       `${centerY}px`;
-
 
     document.body.appendChild(
       bigHeart
     );
 
-
     setTimeout(
-      () => {
-
-        bigHeart.remove();
-
-      },
+      () => bigHeart.remove(),
       1600
     );
-
   }
-
 
   /* =======================================================
      CONFETTI
@@ -1473,7 +1233,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "⭐"
     ];
 
-
     for (
       let i = 0;
       i < 35;
@@ -1483,7 +1242,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const el =
         document.createElement("span");
 
-
       el.textContent =
         symbols[
           Math.floor(
@@ -1492,44 +1250,34 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         ];
 
-
       el.style.position =
         "fixed";
-
 
       el.style.left =
         `${Math.random() * 100}vw`;
 
-
       el.style.top =
         "-30px";
-
 
       el.style.fontSize =
         `${14 + Math.random() * 20}px`;
 
-
       el.style.zIndex =
         "1000";
 
-
       el.style.pointerEvents =
         "none";
-
 
       const duration =
         1.5 +
         Math.random() * 1.5;
 
-
       el.style.transition =
         `transform ${duration}s ease, opacity 2s`;
-
 
       document.body.appendChild(
         el
       );
-
 
       requestAnimationFrame(
         () => {
@@ -1538,40 +1286,28 @@ document.addEventListener("DOMContentLoaded", () => {
             (Math.random() - 0.5) *
             180;
 
-
           const y =
             window.innerHeight +
             80;
 
-
           const rotation =
-            Math.random() * 700;
-
+            Math.random() *
+            700;
 
           el.style.transform =
             `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
 
-
           el.style.opacity =
             "0";
-
         }
       );
 
-
       setTimeout(
-        () => {
-
-          el.remove();
-
-        },
+        () => el.remove(),
         3500
       );
-
     }
-
   }
-
 
   /* =======================================================
      BLOW BUTTON
@@ -1579,7 +1315,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const blowBtn =
     $("blowBtn");
-
 
   if (blowBtn) {
 
@@ -1589,51 +1324,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const cake =
           $("cake");
 
-
-        if (!cake) {
-          return;
-        }
-
-
-        /* ป้องกันกดซ้ำ */
+        if (!cake) return;
 
         if (
           cake.classList.contains(
             "blown"
           )
         ) {
-
           return;
-
         }
-
 
         cake.classList.add(
           "blown"
         );
 
-
         const blowMessage =
           $("blowMessage");
 
-
         if (blowMessage) {
 
-          blowMessage
-            .classList
-            .remove("hidden");
-
+          blowMessage.classList.remove(
+            "hidden"
+          );
         }
-
 
         createBlowCelebration();
 
         confetti();
-
       };
-
   }
-
 
   /* =======================================================
      SHARE DATA
@@ -1644,18 +1363,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const json =
       JSON.stringify(data);
 
-
     const bytes =
       new TextEncoder()
         .encode(json);
 
-
     let binary = "";
-
 
     const chunkSize =
       0x8000;
-
 
     for (
       let i = 0;
@@ -1670,17 +1385,13 @@ document.addEventListener("DOMContentLoaded", () => {
             i + chunkSize
           )
         );
-
     }
-
 
     return btoa(binary)
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
-
   }
-
 
   function decodeShareData(
     encoded
@@ -1691,23 +1402,16 @@ document.addEventListener("DOMContentLoaded", () => {
         .replace(/-/g, "+")
         .replace(/_/g, "/");
 
-
     const padded =
       base64 +
       "=".repeat(
-        (
-          4 -
-          (
-            base64.length %
-            4
-          )
-        ) % 4
+        (4 -
+          (base64.length % 4)) %
+          4
       );
-
 
     const binary =
       atob(padded);
-
 
     const bytes =
       Uint8Array.from(
@@ -1716,34 +1420,17 @@ document.addEventListener("DOMContentLoaded", () => {
           character.charCodeAt(0)
       );
 
-
     return JSON.parse(
       new TextDecoder()
         .decode(bytes)
     );
-
   }
-
 
   /* =======================================================
      SHARE PAYLOAD
      ======================================================= */
 
   function createSharePayload() {
-
-    /*
-      สำคัญ:
-      ไม่เอารูป Base64 ใส่ใน QR
-
-      QR จะเก็บเฉพาะ:
-      - recipient
-      - title
-      - message
-      - sender
-      - theme
-      - music
-    */
-
 
     const data = {
 
@@ -1761,32 +1448,29 @@ document.addEventListener("DOMContentLoaded", () => {
         state.sender || "",
 
       th:
-        state.theme ||
-        "pink",
+        state.theme || "pink",
 
       mu:
         state.music || ""
-
     };
 
+    /*
+      ไม่ใส่รูปใน QR
+      เพราะรูปโหลดจาก GitHub /images/
+    */
 
     return encodeShareData(
       data
     );
-
   }
-
 
   function makeShareUrl() {
 
     return (
-      `${location.origin}` +
-      `${location.pathname}` +
+      `${location.origin}${location.pathname}` +
       `#card=${createSharePayload()}`
     );
-
   }
-
 
   /* =======================================================
      SHARE BUTTON
@@ -1794,7 +1478,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const shareBtn =
     $("shareBtn");
-
 
   if (shareBtn) {
 
@@ -1804,18 +1487,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const url =
           makeShareUrl();
 
-
         try {
 
           await navigator.clipboard
             .writeText(url);
 
-
           alert(
             "คัดลอกลิงก์การ์ดแล้ว 💗\n" +
             "นำไปส่งให้เพื่อนได้เลย"
           );
-
 
         } catch {
 
@@ -1823,13 +1503,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "คัดลอกลิงก์นี้:",
             url
           );
-
         }
-
       };
-
   }
-
 
   /* =======================================================
      QR CODE
@@ -1837,7 +1513,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const qrBtn =
     $("qrBtn");
-
 
   if (qrBtn) {
 
@@ -1847,38 +1522,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const url =
           makeShareUrl();
 
-
         const box =
           $("qrcode");
 
-
-        if (!box) {
-          return;
-        }
-
+        if (!box) return;
 
         box.innerHTML = "";
-
 
         const img =
           document.createElement("img");
 
-
         img.width =
           260;
-
 
         img.height =
           260;
 
-
         img.alt =
           "QR Code";
 
-
         img.loading =
           "eager";
-
 
         img.src =
           "https://api.qrserver.com/v1/create-qr-code/" +
@@ -1888,40 +1552,30 @@ document.addEventListener("DOMContentLoaded", () => {
           "&data=" +
           encodeURIComponent(url);
 
-
         box.appendChild(
           img
         );
 
-
         const qrWarning =
           $("qrWarning");
-
 
         if (qrWarning) {
 
           qrWarning.textContent =
-            "QR นี้เก็บเฉพาะข้อมูลข้อความของการ์ด ไม่เก็บรูป เพื่อให้สแกนง่ายขึ้น";
-
+            "QR นี้เก็บข้อมูลข้อความเท่านั้น รูปจะโหลดจาก GitHub";
         }
-
 
         const qrModal =
           $("qrModal");
 
-
         if (qrModal) {
 
-          qrModal
-            .classList
-            .remove("hidden");
-
+          qrModal.classList.remove(
+            "hidden"
+          );
         }
-
       };
-
   }
-
 
   /* =======================================================
      CLOSE QR
@@ -1929,7 +1583,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const closeQr =
     $("closeQr");
-
 
   if (closeQr) {
 
@@ -1939,23 +1592,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const modal =
           $("qrModal");
 
-
         if (modal) {
 
-          modal
-            .classList
-            .add("hidden");
-
+          modal.classList.add(
+            "hidden"
+          );
         }
-
       };
-
   }
-
 
   const qrModal =
     $("qrModal");
-
 
   if (qrModal) {
 
@@ -1968,25 +1615,20 @@ document.addEventListener("DOMContentLoaded", () => {
           qrModal
         ) {
 
-          qrModal
-            .classList
-            .add("hidden");
-
+          qrModal.classList.add(
+            "hidden"
+          );
         }
-
       }
     );
-
   }
 
-
   /* =======================================================
-     COPY LINK BUTTON
+     COPY LINK
      ======================================================= */
 
   const copyLinkBtn =
     $("copyLinkBtn");
-
 
   if (copyLinkBtn) {
 
@@ -1996,16 +1638,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const url =
           makeShareUrl();
 
-
         try {
 
           await navigator.clipboard
             .writeText(url);
 
-
           copyLinkBtn.textContent =
             "คัดลอกแล้ว ✓";
-
 
           setTimeout(
             () => {
@@ -2017,20 +1656,15 @@ document.addEventListener("DOMContentLoaded", () => {
             1500
           );
 
-
         } catch {
 
           prompt(
             "คัดลอกลิงก์:",
             url
           );
-
         }
-
       };
-
   }
-
 
   /* =======================================================
      LOAD CARD FROM QR
@@ -2041,17 +1675,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const hash =
       location.hash;
 
-
     if (
       !hash.startsWith(
         "#card="
       )
     ) {
-
       return false;
-
     }
-
 
     try {
 
@@ -2060,65 +1690,50 @@ document.addEventListener("DOMContentLoaded", () => {
           hash.slice(6)
         );
 
-
       if ($("recipient")) {
 
         $("recipient").value =
           payload.r || "";
-
       }
-
 
       if ($("titleInput")) {
 
         $("titleInput").value =
           payload.t ||
           "Happy Birthday!";
-
       }
-
 
       if ($("message")) {
 
         $("message").value =
           payload.m || "";
-
       }
-
 
       if ($("sender")) {
 
         $("sender").value =
           payload.s || "";
-
       }
-
 
       state.recipient =
         payload.r || "";
-
 
       state.title =
         payload.t ||
         "Happy Birthday!";
 
-
       state.message =
         payload.m || "";
 
-
       state.sender =
         payload.s || "";
-
 
       state.theme =
         payload.th ||
         "pink";
 
-
       state.music =
         payload.mu || "";
-
 
       state.musicName =
         state.music
@@ -2127,18 +1742,14 @@ document.addEventListener("DOMContentLoaded", () => {
             )
           : "";
 
-
       musicUrl =
         state.music;
-
 
       if ($("musicInput")) {
 
         $("musicInput").value =
           state.music;
-
       }
-
 
       if ($("musicInfo")) {
 
@@ -2146,31 +1757,31 @@ document.addEventListener("DOMContentLoaded", () => {
           state.music
             ? `🎵 ${state.music}`
             : "ยังไม่ได้ใส่ลิงก์เพลง";
-
       }
 
-
       /*
-        QR ไม่ส่งรูป
+        สำคัญมาก:
+        เมื่อเปิดจาก QR
+        ให้ใช้รูปจาก GitHub
       */
 
       imageFiles = [];
 
-      state.images = [];
-
+      state.images =
+        [...GITHUB_IMAGES];
 
       document
-        .querySelectorAll(".theme-option")
+        .querySelectorAll(
+          ".theme-option"
+        )
         .forEach(button => {
 
           button.classList.toggle(
             "selected",
             button.dataset.theme ===
-            state.theme
+              state.theme
           );
-
         });
-
 
       updatePreview();
 
@@ -2178,9 +1789,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showPage("card");
 
-
       return true;
-
 
     } catch (error) {
 
@@ -2189,18 +1798,13 @@ document.addEventListener("DOMContentLoaded", () => {
         error
       );
 
-
       alert(
         "QR Code นี้ไม่ถูกต้องหรือข้อมูลเสียหาย"
       );
 
-
       return false;
-
     }
-
   }
-
 
   /* =======================================================
      PARTICLES
@@ -2211,11 +1815,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const box =
       $("particles");
 
-
     if (!box) {
       return;
     }
-
 
     const symbols = [
       "♡",
@@ -2223,7 +1825,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "✧",
       "•"
     ];
-
 
     for (
       let i = 0;
@@ -2234,10 +1835,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const p =
         document.createElement("span");
 
-
       p.className =
         "particle";
-
 
       p.textContent =
         symbols[
@@ -2247,29 +1846,23 @@ document.addEventListener("DOMContentLoaded", () => {
           )
         ];
 
-
       p.style.left =
         `${Math.random() * 100}%`;
-
 
       p.style.animationDuration =
         `${7 + Math.random() * 9}s`;
 
-
       p.style.animationDelay =
         `${-Math.random() * 12}s`;
-
 
       p.style.fontSize =
         `${10 + Math.random() * 18}px`;
 
-
-      box.appendChild(p);
-
+      box.appendChild(
+        p
+      );
     }
-
   }
-
 
   /* =======================================================
      INITIALIZE
@@ -2279,23 +1872,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   createParticles();
 
-
-  /*
-    ถ้ามี #card=...
-    ให้เปิดการ์ดจาก QR ก่อน
-
-    ถ้าไม่มี
-    ให้โหลดการ์ดล่าสุดจากเครื่อง
-  */
-
   if (!loadFromHash()) {
 
     if (loadSavedCard()) {
 
       showPage("card");
-
     }
-
   }
 
 });
