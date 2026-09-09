@@ -32,6 +32,7 @@ function applyTheme(el, theme) {
     "theme-purple",
     "theme-cream"
   );
+
   el.classList.add(`theme-${theme}`);
 }
 
@@ -131,7 +132,6 @@ $("previewBtn").onclick = async () => {
   }
 
   await buildCard();
-
   showPage("card");
 };
 
@@ -520,21 +520,270 @@ async function buildCard() {
 
 
 /* ==================================================
-   CAKE / CONFETTI
+   CAKE / CONFETTI + HEART CELEBRATION
    ================================================== */
 
+
+/* 💖 สร้างเอฟเฟกต์หัวใจและประกายตอนเป่าเทียน */
+function createBlowCelebration() {
+
+  const cake = $("cake");
+
+  if (!cake) return;
+
+
+  const rect =
+    cake.getBoundingClientRect();
+
+
+  // จุดเริ่มต้นบริเวณด้านบนของเค้ก
+  const centerX =
+    rect.left + rect.width / 2;
+
+  const centerY =
+    rect.top + rect.height * 0.18;
+
+
+  /* 💕 วงแสงตรงเค้ก */
+
+  const burst =
+    document.createElement("div");
+
+  burst.className =
+    "blow-burst";
+
+  burst.style.left =
+    `${centerX - 18}px`;
+
+  burst.style.top =
+    `${centerY - 18}px`;
+
+  document.body.appendChild(burst);
+
+  setTimeout(() => burst.remove(), 1000);
+
+
+  /* 💖 หัวใจหลัก */
+
+  const hearts = [
+    "❤️",
+    "💕",
+    "💖",
+    "💗",
+    "💓",
+    "💘",
+    "💝",
+    "♥️"
+  ];
+
+
+  for (let i = 0; i < 34; i++) {
+
+    const heart =
+      document.createElement("div");
+
+    heart.className =
+      "blow-heart";
+
+    heart.textContent =
+      hearts[
+        Math.floor(
+          Math.random() *
+          hearts.length
+        )
+      ];
+
+
+    const startX =
+      centerX +
+      (Math.random() - 0.5) * 70;
+
+    const startY =
+      centerY +
+      (Math.random() - 0.5) * 35;
+
+
+    heart.style.left =
+      `${startX}px`;
+
+    heart.style.top =
+      `${startY}px`;
+
+
+    heart.style.fontSize =
+      `${17 + Math.random() * 27}px`;
+
+
+    heart.style.setProperty(
+      "--duration",
+      `${1.9 + Math.random() * 1.8}s`
+    );
+
+
+    heart.style.setProperty(
+      "--x1",
+      `${(Math.random() - 0.5) * 110}px`
+    );
+
+    heart.style.setProperty(
+      "--x2",
+      `${(Math.random() - 0.5) * 210}px`
+    );
+
+    heart.style.setProperty(
+      "--x3",
+      `${(Math.random() - 0.5) * 330}px`
+    );
+
+
+    heart.style.setProperty(
+      "--r1",
+      `${(Math.random() - 0.5) * 60}deg`
+    );
+
+    heart.style.setProperty(
+      "--r2",
+      `${(Math.random() - 0.5) * 120}deg`
+    );
+
+    heart.style.setProperty(
+      "--r3",
+      `${(Math.random() - 0.5) * 180}deg`
+    );
+
+
+    document.body.appendChild(heart);
+
+
+    setTimeout(
+      () => heart.remove(),
+      4100
+    );
+  }
+
+
+  /* ✨ ประกายดาว */
+
+  const sparkles = [
+    "✨",
+    "✦",
+    "✧",
+    "⋆",
+    "⭐",
+    "💫"
+  ];
+
+
+  for (let i = 0; i < 26; i++) {
+
+    const sparkle =
+      document.createElement("div");
+
+    sparkle.className =
+      "blow-sparkle";
+
+    sparkle.textContent =
+      sparkles[
+        Math.floor(
+          Math.random() *
+          sparkles.length
+        )
+      ];
+
+
+    sparkle.style.left =
+      `${centerX +
+        (Math.random() - 0.5) * 90}px`;
+
+    sparkle.style.top =
+      `${centerY +
+        (Math.random() - 0.5) * 40}px`;
+
+
+    sparkle.style.fontSize =
+      `${12 + Math.random() * 20}px`;
+
+
+    sparkle.style.setProperty(
+      "--duration",
+      `${1.2 + Math.random() * 1.5}s`
+    );
+
+
+    sparkle.style.setProperty(
+      "--x",
+      `${(Math.random() - 0.5) * 160}px`
+    );
+
+    sparkle.style.setProperty(
+      "--x2",
+      `${(Math.random() - 0.5) * 260}px`
+    );
+
+
+    document.body.appendChild(sparkle);
+
+
+    setTimeout(
+      () => sparkle.remove(),
+      3000
+    );
+  }
+
+
+  /* 💗 หัวใจใหญ่ตรงกลาง */
+
+  const bigHeart =
+    document.createElement("div");
+
+  bigHeart.className =
+    "blow-big-heart";
+
+  bigHeart.textContent =
+    "💖";
+
+  bigHeart.style.left =
+    `${centerX}px`;
+
+  bigHeart.style.top =
+    `${centerY}px`;
+
+
+  document.body.appendChild(bigHeart);
+
+
+  setTimeout(
+    () => bigHeart.remove(),
+    1600
+  );
+}
+
+
+/* 🎉 Confetti เดิม + เพิ่มหัวใจให้เข้ากับธีม */
+
 $("blowBtn").onclick = () => {
+
+  // ป้องกันกดซ้ำระหว่างเอฟเฟกต์
+  if ($("cake").classList.contains("blown")) {
+    return;
+  }
+
 
   $("cake")
     .classList
     .add("blown");
 
+
   $("blowMessage")
     .classList
     .remove("hidden");
 
+
+  createBlowCelebration();
+
   confetti();
 };
+
 
 function confetti() {
 
@@ -546,10 +795,12 @@ function confetti() {
     "⭐"
   ];
 
+
   for (let i = 0; i < 35; i++) {
 
     const el =
       document.createElement("span");
+
 
     el.textContent =
       symbols[
@@ -559,22 +810,33 @@ function confetti() {
         )
       ];
 
-    el.style.position = "fixed";
+
+    el.style.position =
+      "fixed";
 
     el.style.left =
       Math.random() * 100 + "vw";
 
-    el.style.top = "-30px";
+    el.style.top =
+      "-30px";
+
 
     el.style.fontSize =
       14 + Math.random() * 20 + "px";
 
-    el.style.zIndex = 100;
+
+    el.style.zIndex =
+      100;
+
+    el.style.pointerEvents =
+      "none";
+
 
     el.style.transition =
       `transform ${
         1.5 + Math.random() * 1.5
       }s ease, opacity 2s`;
+
 
     document.body.appendChild(el);
 
@@ -590,7 +852,9 @@ function confetti() {
           Math.random() * 700
         }deg)`;
 
-      el.style.opacity = "0";
+
+      el.style.opacity =
+        "0";
     });
 
 
@@ -630,9 +894,11 @@ function encodeShareData(data) {
   const json =
     JSON.stringify(data);
 
+
   const bytes =
     new TextEncoder()
       .encode(json);
+
 
   let binary = "";
 
@@ -751,15 +1017,18 @@ $("shareBtn").onclick =
     const url =
       makeShareUrl();
 
+
     try {
 
       await navigator.clipboard
         .writeText(url);
 
+
       alert(
         "คัดลอกลิงก์การ์ดแล้ว 💗\n" +
         "นำไปส่งให้เพื่อนได้เลย"
       );
+
 
     } catch {
 
@@ -780,8 +1049,10 @@ $("qrBtn").onclick = () => {
   const url =
     makeShareUrl();
 
+
   const box =
     $("qrcode");
+
 
   box.innerHTML = "";
 
@@ -794,17 +1065,22 @@ $("qrBtn").onclick = () => {
     margin = 12
   */
 
+
   const img =
     document.createElement("img");
 
 
-  img.width = 260;
+  img.width =
+    260;
 
-  img.height = 260;
+  img.height =
+    260;
 
-  img.alt = "QR Code";
+  img.alt =
+    "QR Code";
 
-  img.loading = "eager";
+  img.loading =
+    "eager";
 
 
   img.src =
@@ -865,10 +1141,12 @@ $("copyLinkBtn").onclick =
     const url =
       makeShareUrl();
 
+
     try {
 
       await navigator.clipboard
         .writeText(url);
+
 
       $("copyLinkBtn")
         .textContent =
@@ -1007,6 +1285,7 @@ function loadFromHash() {
           b.dataset.theme ===
           state.theme
         );
+
       });
 
 
@@ -1027,10 +1306,12 @@ function loadFromHash() {
       err
     );
 
+
     alert(
       "QR Code นี้ไม่ถูกต้อง " +
       "หรือข้อมูลเสียหาย"
     );
+
 
     return false;
   }
@@ -1045,6 +1326,7 @@ function loadFromHash() {
 
   const box =
     $("particles");
+
 
   const symbols = [
     "♡",
@@ -1122,7 +1404,7 @@ updatePreview();
 if (!loadFromHash()) {
 
   if (loadSavedCard()) {
-
     showPage("card");
   }
+
 }
