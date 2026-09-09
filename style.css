@@ -1,34 +1,116 @@
-$("blowBtn").onclick = () => {
-  $("cake").classList.add("blown");
-  $("blowMessage").classList.remove("hidden");
-  confetti();
-};
+/* ==================================================
+   💗 FIX PREMIUM BLOW EFFECT
+   ================================================== */
 
-function confetti() {
-  const symbols = ["🎉", "✨", "💗", "🌸", "⭐"];
+.blow-heart {
+  position: fixed;
+  left: 50%;
+  top: 62%;
+  pointer-events: none;
+  z-index: 200;
+  user-select: none;
+  line-height: 1;
 
-  for (let i = 0; i < 35; i++) {
-    const el = document.createElement("span");
+  animation:
+    heartRise
+    var(--duration, 2s)
+    cubic-bezier(.18,.78,.22,1)
+    forwards;
 
-    el.textContent =
-      symbols[Math.floor(Math.random() * symbols.length)];
+  filter: drop-shadow(0 6px 8px rgba(220,70,130,.18));
+  will-change: transform, opacity;
+}
 
-    el.style.position = "fixed";
-    el.style.left = Math.random() * 100 + "vw";
-    el.style.top = "-30px";
-    el.style.fontSize = 14 + Math.random() * 20 + "px";
-    el.style.zIndex = 100;
-    el.style.transition =
-      `transform ${1.5 + Math.random() * 1.5}s ease, opacity 2s`;
+.blow-sparkle {
+  position: fixed;
+  left: 50%;
+  top: 62%;
+  pointer-events: none;
+  z-index: 201;
+  user-select: none;
+  line-height: 1;
 
-    document.body.appendChild(el);
+  animation:
+    sparkleRise
+    var(--duration, 1.8s)
+    cubic-bezier(.2,.8,.2,1)
+    forwards;
+}
 
-    requestAnimationFrame(() => {
-      el.style.transform =
-        `translate(${(Math.random() - 0.5) * 180}px, ${window.innerHeight + 80}px) rotate(${Math.random() * 700}deg)`;
-      el.style.opacity = "0";
-    });
+.blow-burst {
+  position: fixed;
+  left: 50%;
+  top: 62%;
 
-    setTimeout(() => el.remove(), 3500);
+  width: 36px;
+  height: 36px;
+
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 199;
+
+  transform: translate(-50%, -50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.9) 0%,
+      rgba(255,190,220,.45) 35%,
+      rgba(255,150,200,.12) 65%,
+      transparent 75%
+    );
+
+  box-shadow:
+    0 0 18px rgba(255,150,190,.55),
+    0 0 45px rgba(255,190,220,.4),
+    0 0 80px rgba(255,220,235,.25);
+
+  animation:
+    burstGlow
+    1s
+    cubic-bezier(.15,.8,.2,1)
+    forwards;
+}
+
+.blow-big-heart {
+  position: fixed;
+  left: 50%;
+  top: 62%;
+
+  pointer-events: none;
+  z-index: 202;
+
+  font-size: 46px;
+  line-height: 1;
+
+  filter:
+    drop-shadow(0 8px 15px rgba(220,60,120,.28));
+
+  animation:
+    bigHeartPop
+    1.5s
+    cubic-bezier(.16,1.2,.3,1)
+    forwards;
+}
+
+
+/* มือถือ */
+@media (max-width: 520px) {
+
+  .blow-heart,
+  .blow-sparkle {
+    left: 50%;
+    top: 60%;
+  }
+
+  .blow-big-heart {
+    left: 50%;
+    top: 60%;
+    font-size: 38px;
+  }
+
+  .blow-burst {
+    left: 50%;
+    top: 60%;
   }
 }
