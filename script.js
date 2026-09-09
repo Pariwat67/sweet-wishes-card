@@ -53,9 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function showPage(name) {
 
     Object.values(pages).forEach(page => {
+
       if (page) {
         page.classList.remove("active");
       }
+
     });
 
     if (pages[name]) {
@@ -110,21 +112,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const miniCard = $("miniCard");
 
     if (miniTitle) {
+
       miniTitle.textContent =
         $("titleInput")?.value ||
         "Happy Birthday!";
+
     }
 
     if (miniRecipient) {
+
       miniRecipient.textContent =
         $("recipient")?.value ||
         "ชื่อคนรับ";
+
     }
 
     if (miniMessage) {
+
       miniMessage.textContent =
         $("message")?.value ||
         "คำอวยพรของคุณจะปรากฏตรงนี้...";
+
     }
 
     if (miniSender) {
@@ -136,12 +144,14 @@ document.addEventListener("DOMContentLoaded", () => {
         sender
           ? `— ${sender} —`
           : "— จากใคร —";
+
     }
 
     applyTheme(
       miniCard,
       state.theme
     );
+
   }
 
   ["recipient", "titleInput", "message", "sender"]
@@ -150,10 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const input = $(id);
 
       if (input) {
+
         input.addEventListener(
           "input",
           updatePreview
         );
+
       }
 
     });
@@ -183,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "pink";
 
           updatePreview();
+
         }
       );
 
@@ -206,8 +219,10 @@ document.addEventListener("DOMContentLoaded", () => {
           ).slice(0, 6);
 
         renderImageList();
+
       }
     );
+
   }
 
   function renderImageList() {
@@ -258,6 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             renderImageList();
+
           }
         );
 
@@ -267,8 +283,10 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         list.appendChild(wrap);
+
       }
     );
+
   }
 
   /* =========================================================
@@ -296,8 +314,10 @@ document.addEventListener("DOMContentLoaded", () => {
           musicUrl
             ? `🎵 ${musicUrl}`
             : "ยังไม่ได้ใส่ลิงก์เพลง";
+
       }
     );
+
   }
 
   function getMusicServiceName(url) {
@@ -314,13 +334,17 @@ document.addEventListener("DOMContentLoaded", () => {
         host.includes("youtube.com") ||
         host.includes("youtu.be")
       ) {
+
         return "เพลงจาก YouTube";
+
       }
 
       if (
         host.includes("spotify.com")
       ) {
+
         return "เพลงจาก Spotify";
+
       }
 
       return "เพลงของเรา";
@@ -328,7 +352,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch {
 
       return "เพลงของเรา";
+
     }
+
   }
 
   /* =========================================================
@@ -342,6 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     startBtn.onclick =
       () => showPage("creator");
+
   }
 
   const createTopBtn =
@@ -351,6 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     createTopBtn.onclick =
       () => showPage("creator");
+
   }
 
   const backBtn =
@@ -360,6 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     backBtn.onclick =
       () => showPage("landing");
+
   }
 
   const editBtn =
@@ -369,6 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     editBtn.onclick =
       () => showPage("creator");
+
   }
 
   /* =========================================================
@@ -384,13 +414,17 @@ document.addEventListener("DOMContentLoaded", () => {
       () => {
 
         if ($("recipient")) {
+
           $("recipient").value =
             "คนพิเศษ";
+
         }
 
         if ($("titleInput")) {
+
           $("titleInput").value =
             "Happy Birthday!";
+
         }
 
         if ($("message")) {
@@ -399,12 +433,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "ขอให้วันนี้เต็มไปด้วยรอยยิ้ม\n" +
             "ขอให้ทุกวันที่ผ่านไปมีแต่เรื่องดี ๆ\n" +
             "และขอให้ความฝันของเธอค่อย ๆ เป็นจริงนะ 💗";
+
         }
 
         if ($("sender")) {
 
           $("sender").value =
             "คนที่อยากเห็นเธอมีความสุข";
+
         }
 
         state.theme =
@@ -424,7 +460,9 @@ document.addEventListener("DOMContentLoaded", () => {
         updatePreview();
 
         showPage("creator");
+
       };
+
   }
 
   /* =========================================================
@@ -460,6 +498,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         musicName:
           state.musicName || ""
+
       };
 
       localStorage.setItem(
@@ -473,7 +512,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "ไม่สามารถบันทึกการ์ดลงเครื่องได้:",
         error
       );
+
     }
+
   }
 
   /* =========================================================
@@ -497,24 +538,32 @@ document.addEventListener("DOMContentLoaded", () => {
         JSON.parse(raw);
 
       if ($("recipient")) {
+
         $("recipient").value =
           data.recipient || "";
+
       }
 
       if ($("titleInput")) {
+
         $("titleInput").value =
           data.title ||
           "Happy Birthday!";
+
       }
 
       if ($("message")) {
+
         $("message").value =
           data.message || "";
+
       }
 
       if ($("sender")) {
+
         $("sender").value =
           data.sender || "";
+
       }
 
       state.recipient =
@@ -553,8 +602,10 @@ document.addEventListener("DOMContentLoaded", () => {
         state.music;
 
       if ($("musicInput")) {
+
         $("musicInput").value =
           state.music;
+
       }
 
       if ($("musicInfo")) {
@@ -563,6 +614,7 @@ document.addEventListener("DOMContentLoaded", () => {
           state.music
             ? `🎵 ${state.music}`
             : "ยังไม่ได้ใส่ลิงก์เพลง";
+
       }
 
       document
@@ -591,7 +643,9 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       return false;
+
     }
+
   }
 
   /* =========================================================
@@ -605,18 +659,21 @@ document.addEventListener("DOMContentLoaded", () => {
       $("cardTitle").textContent =
         state.title ||
         "Happy Birthday!";
+
     }
 
     if ($("cardRecipient")) {
 
       $("cardRecipient").textContent =
         state.recipient || "";
+
     }
 
     if ($("cardMessage")) {
 
       $("cardMessage").textContent =
         state.message || "";
+
     }
 
     if ($("cardSender")) {
@@ -625,6 +682,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.sender
           ? `— ${state.sender} —`
           : "— ด้วยความรักและความปรารถนาดี —";
+
     }
 
     applyTheme(
@@ -659,8 +717,10 @@ document.addEventListener("DOMContentLoaded", () => {
             "lazy";
 
           gallery.appendChild(img);
+
         }
       );
+
     }
 
     /* =====================================================
@@ -685,6 +745,7 @@ document.addEventListener("DOMContentLoaded", () => {
           getMusicServiceName(
             state.music
           );
+
       }
 
       if (musicLink) {
@@ -697,6 +758,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         musicLink.rel =
           "noopener noreferrer";
+
       }
 
       if (musicPlayer) {
@@ -704,6 +766,7 @@ document.addEventListener("DOMContentLoaded", () => {
         musicPlayer.classList.remove(
           "hidden"
         );
+
       }
 
     } else {
@@ -713,6 +776,7 @@ document.addEventListener("DOMContentLoaded", () => {
         musicPlayer.classList.add(
           "hidden"
         );
+
       }
 
       if (musicLink) {
@@ -720,8 +784,11 @@ document.addEventListener("DOMContentLoaded", () => {
         musicLink.removeAttribute(
           "href"
         );
+
       }
+
     }
+
   }
 
   /* =========================================================
@@ -750,18 +817,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       $("cardTitle").textContent =
         state.title;
+
     }
 
     if ($("cardRecipient")) {
 
       $("cardRecipient").textContent =
         state.recipient;
+
     }
 
     if ($("cardMessage")) {
 
       $("cardMessage").textContent =
         state.message;
+
     }
 
     if ($("cardSender")) {
@@ -770,6 +840,7 @@ document.addEventListener("DOMContentLoaded", () => {
         state.sender
           ? `— ${state.sender} —`
           : "— ด้วยความรักและความปรารถนาดี —";
+
     }
 
     applyTheme(
@@ -803,8 +874,10 @@ document.addEventListener("DOMContentLoaded", () => {
             "lazy";
 
           gallery.appendChild(img);
+
         }
       );
+
     }
 
     /* =====================================================
@@ -837,6 +910,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         musicName.textContent =
           state.musicName;
+
       }
 
       if (musicLink) {
@@ -849,6 +923,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         musicLink.rel =
           "noopener noreferrer";
+
       }
 
       if (musicPlayer) {
@@ -856,6 +931,7 @@ document.addEventListener("DOMContentLoaded", () => {
         musicPlayer.classList.remove(
           "hidden"
         );
+
       }
 
     } else {
@@ -871,6 +947,7 @@ document.addEventListener("DOMContentLoaded", () => {
         musicPlayer.classList.add(
           "hidden"
         );
+
       }
 
       if (musicLink) {
@@ -878,7 +955,9 @@ document.addEventListener("DOMContentLoaded", () => {
         musicLink.removeAttribute(
           "href"
         );
+
       }
+
     }
 
     if ($("cake")) {
@@ -886,6 +965,7 @@ document.addEventListener("DOMContentLoaded", () => {
       $("cake").classList.remove(
         "blown"
       );
+
     }
 
     if ($("blowMessage")) {
@@ -893,9 +973,11 @@ document.addEventListener("DOMContentLoaded", () => {
       $("blowMessage").classList.add(
         "hidden"
       );
+
     }
 
     saveCard();
+
   }
 
   /* =========================================================
@@ -922,12 +1004,15 @@ document.addEventListener("DOMContentLoaded", () => {
           $("recipient")?.focus();
 
           return;
+
         }
 
         await buildCard();
 
         showPage("card");
+
       };
+
   }
 
   /* =========================================================
@@ -957,13 +1042,16 @@ document.addEventListener("DOMContentLoaded", () => {
           $("recipient")?.focus();
 
           return;
+
         }
 
         await buildCard();
 
         showPage("card");
+
       }
     );
+
   }
 
   /* =========================================================
@@ -1106,6 +1194,7 @@ document.addEventListener("DOMContentLoaded", () => {
         () => heart.remove(),
         4100
       );
+
     }
 
     /* SPARKLES */
@@ -1171,6 +1260,7 @@ document.addEventListener("DOMContentLoaded", () => {
         () => sparkle.remove(),
         3000
       );
+
     }
 
     /* BIG HEART */
@@ -1198,6 +1288,7 @@ document.addEventListener("DOMContentLoaded", () => {
       () => bigHeart.remove(),
       1600
     );
+
   }
 
   /* =========================================================
@@ -1280,6 +1371,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           el.style.opacity =
             "0";
+
         }
       );
 
@@ -1287,7 +1379,9 @@ document.addEventListener("DOMContentLoaded", () => {
         () => el.remove(),
         3500
       );
+
     }
+
   }
 
   /* =========================================================
@@ -1312,7 +1406,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "blown"
           )
         ) {
+
           return;
+
         }
 
         cake.classList.add(
@@ -1327,12 +1423,15 @@ document.addEventListener("DOMContentLoaded", () => {
           blowMessage.classList.remove(
             "hidden"
           );
+
         }
 
         createBlowCelebration();
 
         confetti();
+
       };
+
   }
 
   /* =========================================================
@@ -1366,12 +1465,14 @@ document.addEventListener("DOMContentLoaded", () => {
             i + chunkSize
           )
         );
+
     }
 
     return btoa(binary)
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
+
   }
 
   /* =========================================================
@@ -1381,69 +1482,118 @@ document.addEventListener("DOMContentLoaded", () => {
   function decodeShareData(encoded) {
 
     if (!encoded) {
+
       throw new Error(
         "ไม่มีข้อมูลการ์ด"
       );
+
     }
+
+    const candidates = [];
+
+    let value =
+      String(encoded).trim();
 
     try {
 
-      /* รองรับ URL encoding */
+      value =
+        decodeURIComponent(value);
 
-      encoded =
-        decodeURIComponent(
-          encoded
-        );
+    } catch {}
 
-    } catch {
-      /* ใช้ค่าเดิม */
+    candidates.push(value);
+
+    // รองรับ JSON ตรง ๆ เผื่อเป็นลิงก์รุ่นเก่า
+    if (
+      value.startsWith("{") &&
+      value.endsWith("}")
+    ) {
+
+      try {
+
+        const data =
+          JSON.parse(value);
+
+        if (
+          data &&
+          typeof data === "object"
+        ) {
+
+          return data;
+
+        }
+
+      } catch {}
+
     }
 
-    /* Base64 URL-safe → Base64 */
-
+    // รองรับ Base64URL และ Base64 ปกติ
     let base64 =
-      encoded
+      value
         .replace(/-/g, "+")
-        .replace(/_/g, "/");
-
-    /* เติม = */
+        .replace(/_/g, "/")
+        .replace(/\s/g, "");
 
     while (
       base64.length % 4 !== 0
     ) {
+
       base64 += "=";
+
     }
 
-    /* Decode */
+    candidates.push(base64);
 
-    const binary =
-      atob(base64);
-
-    const bytes =
-      Uint8Array.from(
-        binary,
-        character =>
-          character.charCodeAt(0)
-      );
-
-    const json =
-      new TextDecoder(
-        "utf-8"
-      ).decode(bytes);
-
-    const data =
-      JSON.parse(json);
-
-    if (
-      !data ||
-      typeof data !== "object"
+    for (
+      const candidate of candidates
     ) {
-      throw new Error(
-        "ข้อมูลการ์ดไม่ถูกต้อง"
-      );
+
+      try {
+
+        const binary =
+          atob(candidate);
+
+        const bytes =
+          new Uint8Array(
+            binary.length
+          );
+
+        for (
+          let i = 0;
+          i < binary.length;
+          i++
+        ) {
+
+          bytes[i] =
+            binary.charCodeAt(i);
+
+        }
+
+        const json =
+          new TextDecoder(
+            "utf-8"
+          ).decode(bytes);
+
+        const data =
+          JSON.parse(json);
+
+        if (
+          data &&
+          typeof data === "object"
+        ) {
+
+          return data;
+
+        }
+
+      } catch {}
+
     }
 
-    return data;
+    throw new Error(
+      "ข้อมูลการ์ดไม่ถูกต้อง"
+    );
+
   }
 
   /* =========================================================
@@ -1472,11 +1622,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       mu:
         state.music || ""
+
     };
 
     return encodeShareData(
       data
     );
+
   }
 
   /* =========================================================
@@ -1488,21 +1640,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const payload =
       createSharePayload();
 
-    /*
-      สำคัญ:
-      ใช้ URL เว็บปัจจุบัน
-      แล้วต่อ #card=ข้อมูล
-    */
-
     const baseUrl =
-      window.location.origin +
-      window.location.pathname;
+      new URL(
+        window.location.origin +
+        window.location.pathname
+      );
 
-    return (
-      baseUrl +
-      "#card=" +
-      payload
-    );
+    // ล้าง query/hash เดิม เช่น ?utm_source=...
+    baseUrl.search = "";
+
+    baseUrl.hash =
+      "card=" +
+      payload;
+
+    return baseUrl.toString();
+
   }
 
   /* =========================================================
@@ -1536,8 +1688,11 @@ document.addEventListener("DOMContentLoaded", () => {
             "คัดลอกลิงก์นี้:",
             url
           );
+
         }
+
       };
+
   }
 
   /* =========================================================
@@ -1551,10 +1706,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     qrBtn.onclick =
       () => {
-
-        /*
-          สร้าง URL การ์ดโดยตรง
-        */
 
         const url =
           makeShareUrl();
@@ -1581,11 +1732,6 @@ document.addEventListener("DOMContentLoaded", () => {
         img.loading =
           "eager";
 
-        /*
-          QR นี้จะเก็บ URL เต็ม
-          ไม่ใช่เก็บ JSON โดยตรง
-        */
-
         img.src =
           "https://api.qrserver.com/v1/create-qr-code/" +
           "?size=260x260" +
@@ -1599,6 +1745,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             box.innerHTML =
               "<p>สร้าง QR Code ไม่สำเร็จ กรุณาลองใหม่</p>";
+
           };
 
         box.appendChild(
@@ -1612,6 +1759,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           qrWarning.textContent =
             "สแกน QR นี้แล้วจะเปิดการ์ดใบนี้โดยตรง 💗";
+
         }
 
         const qrModal =
@@ -1622,8 +1770,11 @@ document.addEventListener("DOMContentLoaded", () => {
           qrModal.classList.remove(
             "hidden"
           );
+
         }
+
       };
+
   }
 
   /* =========================================================
@@ -1646,8 +1797,11 @@ document.addEventListener("DOMContentLoaded", () => {
           modal.classList.add(
             "hidden"
           );
+
         }
+
       };
+
   }
 
   const qrModal =
@@ -1667,9 +1821,12 @@ document.addEventListener("DOMContentLoaded", () => {
           qrModal.classList.add(
             "hidden"
           );
+
         }
+
       }
     );
+
   }
 
   /* =========================================================
@@ -1711,87 +1868,64 @@ document.addEventListener("DOMContentLoaded", () => {
             "คัดลอกลิงก์:",
             url
           );
-        }
-      };
-  }
 
-  /* =========================================================
+        }
+
+      };
+
+  }
+     /* =========================================================
      LOAD CARD FROM SHARE URL / QR
      ========================================================= */
 
   function loadFromHash() {
 
     const hash =
-      window.location.hash;
-
-    /*
-      ต้องขึ้นต้นด้วย #card=
-    */
+      window.location.hash || "";
 
     if (
-      !hash ||
       !hash.startsWith("#card=")
     ) {
 
       return false;
+
+    }
+
+    const encoded =
+      hash
+        .substring("#card=".length)
+        .trim();
+
+    if (!encoded) {
+
+      alert(
+        "ลิงก์การ์ดไม่มีข้อมูล กรุณาสร้างลิงก์ใหม่"
+      );
+
+      return true;
+
+    }
+
+    // ป้องกันการใช้ลิงก์ตัวอย่างที่มี ...
+    if (
+      encoded.includes("...") ||
+      encoded === "eyJ..."
+    ) {
+
+      alert(
+        "ลิงก์การ์ดไม่สมบูรณ์ กรุณาสร้างลิงก์ใหม่"
+      );
+
+      return true;
+
     }
 
     try {
-
-      /*
-        ตัด #card= ออก
-        โดยใช้ความยาวจริง
-      */
-
-      const encoded =
-        hash.substring(
-          "#card=".length
-        );
-
-      if (!encoded) {
-
-        throw new Error(
-          "ไม่มีข้อมูลหลัง #card="
-        );
-      }
 
       const payload =
         decodeShareData(
           encoded
         );
-
-      /* =====================================================
-         LOAD FORM DATA
-         ===================================================== */
-
-      if ($("recipient")) {
-
-        $("recipient").value =
-          payload.r || "";
-      }
-
-      if ($("titleInput")) {
-
-        $("titleInput").value =
-          payload.t ||
-          "Happy Birthday!";
-      }
-
-      if ($("message")) {
-
-        $("message").value =
-          payload.m || "";
-      }
-
-      if ($("sender")) {
-
-        $("sender").value =
-          payload.s || "";
-      }
-
-      /* =====================================================
-         UPDATE STATE
-         ===================================================== */
 
       state.recipient =
         payload.r || "";
@@ -1806,8 +1940,19 @@ document.addEventListener("DOMContentLoaded", () => {
       state.sender =
         payload.s || "";
 
+      const validThemes = [
+        "pink",
+        "blue",
+        "purple",
+        "cream"
+      ];
+
       state.theme =
-        payload.th || "pink";
+        validThemes.includes(
+          payload.th
+        )
+          ? payload.th
+          : "pink";
 
       state.music =
         payload.mu || "";
@@ -1822,14 +1967,39 @@ document.addEventListener("DOMContentLoaded", () => {
       musicUrl =
         state.music;
 
-      /* =====================================================
-         MUSIC UI
-         ===================================================== */
+      if ($("recipient")) {
+
+        $("recipient").value =
+          state.recipient;
+
+      }
+
+      if ($("titleInput")) {
+
+        $("titleInput").value =
+          state.title;
+
+      }
+
+      if ($("message")) {
+
+        $("message").value =
+          state.message;
+
+      }
+
+      if ($("sender")) {
+
+        $("sender").value =
+          state.sender;
+
+      }
 
       if ($("musicInput")) {
 
         $("musicInput").value =
           state.music;
+
       }
 
       if ($("musicInfo")) {
@@ -1838,20 +2008,13 @@ document.addEventListener("DOMContentLoaded", () => {
           state.music
             ? `🎵 ${state.music}`
             : "ยังไม่ได้ใส่ลิงก์เพลง";
-      }
 
-      /* =====================================================
-         IMAGES
-         ===================================================== */
+      }
 
       imageFiles = [];
 
       state.images =
         [...GITHUB_IMAGES];
-
-      /* =====================================================
-         THEME UI
-         ===================================================== */
 
       document
         .querySelectorAll(".theme-option")
@@ -1862,30 +2025,21 @@ document.addEventListener("DOMContentLoaded", () => {
             button.dataset.theme ===
               state.theme
           );
-        });
 
-      /* =====================================================
-         RENDER
-         ===================================================== */
+        });
 
       updatePreview();
 
       renderFullCard();
 
-      /*
-        สำคัญมาก:
-        เปิดการ์ดทันที
-      */
-
+      // เปิดการ์ดทันที
       showPage("card");
 
-      /*
-        เก็บไว้ในเครื่องด้วย
-        แต่ไม่ใช้เป็นข้อมูลหลัก
-      */
-
+      // บันทึกไว้ในเครื่อง
       try {
+
         saveCard();
+
       } catch {}
 
       return true;
@@ -1897,19 +2051,18 @@ document.addEventListener("DOMContentLoaded", () => {
         error
       );
 
-      /*
-        ไม่เปิดหน้า Creator
-        ถ้า URL มี #card=
-        แต่ข้อมูลเสีย
-      */
-
       alert(
         "ไม่สามารถเปิดการ์ดนี้ได้\n" +
-        "ลิงก์อาจไม่ครบหรือข้อมูลเสียหาย"
+        "ลิงก์อาจไม่ครบหรือข้อมูลเสียหาย กรุณาสร้างลิงก์ใหม่"
       );
 
-      return false;
+      // สำคัญ:
+      // มี #card= แล้ว ห้ามย้อนกลับไปใช้
+      // localStorage เปิดหน้าอื่นแทน
+      return true;
+
     }
+
   }
 
   /* =========================================================
@@ -1965,7 +2118,9 @@ document.addEventListener("DOMContentLoaded", () => {
       box.appendChild(
         p
       );
+
     }
+
   }
 
   /* =========================================================
@@ -1989,6 +2144,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const openedFromShare =
     loadFromHash();
 
+  // รองรับกรณีเปลี่ยน #card= โดยไม่รีโหลดหน้า
+  window.addEventListener(
+    "hashchange",
+    () => {
+      loadFromHash();
+    }
+  );
+
   if (!openedFromShare) {
 
     if (loadSavedCard()) {
@@ -1998,7 +2161,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
 
       showPage("landing");
+
     }
+
   }
 
 });
