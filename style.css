@@ -1,116 +1,173 @@
 /* ==================================================
-   💗 FIX PREMIUM BLOW EFFECT
+   🎂 BLOW CANDLE EFFECT - FINAL
    ================================================== */
 
-.blow-heart {
-  position: fixed;
-  left: 50%;
-  top: 62%;
-  pointer-events: none;
-  z-index: 200;
-  user-select: none;
-  line-height: 1;
-
-  animation:
-    heartRise
-    var(--duration, 2s)
-    cubic-bezier(.18,.78,.22,1)
-    forwards;
-
-  filter: drop-shadow(0 6px 8px rgba(220,70,130,.18));
-  will-change: transform, opacity;
+/* กันเอฟเฟกต์ล้นออกด้านข้าง */
+html,
+body {
+  overflow-x: hidden;
 }
 
-.blow-sparkle {
-  position: fixed;
-  left: 50%;
-  top: 62%;
-  pointer-events: none;
-  z-index: 201;
-  user-select: none;
-  line-height: 1;
+/* --------------------------------------------------
+   หัวใจ / ดาว / Confetti ที่ JavaScript สร้าง
+   -------------------------------------------------- */
 
+body > span {
+  position: fixed !important;
+
+  /* จุดเริ่มต้นอยู่บริเวณกลางหน้า */
+  left: 50% !important;
+  top: 58% !important;
+
+  z-index: 9999 !important;
+
+  pointer-events: none !important;
+  user-select: none !important;
+
+  line-height: 1 !important;
+
+  opacity: 1;
+
+  /*
+     สำคัญ:
+     ให้ CSS animation เป็นคนควบคุม transform
+     แทน transform ที่ JavaScript ใส่แบบเดิม
+  */
   animation:
-    sparkleRise
-    var(--duration, 1.8s)
-    cubic-bezier(.2,.8,.2,1)
-    forwards;
-}
-
-.blow-burst {
-  position: fixed;
-  left: 50%;
-  top: 62%;
-
-  width: 36px;
-  height: 36px;
-
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 199;
-
-  transform: translate(-50%, -50%);
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255,255,255,.9) 0%,
-      rgba(255,190,220,.45) 35%,
-      rgba(255,150,200,.12) 65%,
-      transparent 75%
-    );
-
-  box-shadow:
-    0 0 18px rgba(255,150,190,.55),
-    0 0 45px rgba(255,190,220,.4),
-    0 0 80px rgba(255,220,235,.25);
-
-  animation:
-    burstGlow
-    1s
-    cubic-bezier(.15,.8,.2,1)
-    forwards;
-}
-
-.blow-big-heart {
-  position: fixed;
-  left: 50%;
-  top: 62%;
-
-  pointer-events: none;
-  z-index: 202;
-
-  font-size: 46px;
-  line-height: 1;
-
-  filter:
-    drop-shadow(0 8px 15px rgba(220,60,120,.28));
-
-  animation:
-    bigHeartPop
-    1.5s
-    cubic-bezier(.16,1.2,.3,1)
-    forwards;
+    blowHeartAnimation
+    2.2s
+    cubic-bezier(.18,.75,.25,1)
+    forwards !important;
 }
 
 
-/* มือถือ */
+/* --------------------------------------------------
+   Animation ตอนเป่าเทียน
+   เริ่มจากเค้ก → พุ่งขึ้น → กระจาย → จางหาย
+   -------------------------------------------------- */
+
+@keyframes blowHeartAnimation {
+
+  0% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.25)
+      rotate(0deg);
+
+    opacity: 0;
+  }
+
+  10% {
+    transform:
+      translate(-50%, -50%)
+      scale(1)
+      rotate(0deg);
+
+    opacity: 1;
+  }
+
+  45% {
+    transform:
+      translate(
+        calc(-50% + var(--blow-x, 0px)),
+        calc(-50% - 180px)
+      )
+      scale(1)
+      rotate(180deg);
+
+    opacity: 1;
+  }
+
+  75% {
+    transform:
+      translate(
+        calc(-50% + var(--blow-x, 0px)),
+        calc(-50% - 330px)
+      )
+      scale(0.85)
+      rotate(360deg);
+
+    opacity: 0.8;
+  }
+
+  100% {
+    transform:
+      translate(
+        calc(-50% + var(--blow-x, 0px)),
+        calc(-50% - 450px)
+      )
+      scale(0.4)
+      rotate(540deg);
+
+    opacity: 0;
+  }
+}
+
+
+/* --------------------------------------------------
+   มือถือ
+   -------------------------------------------------- */
+
 @media (max-width: 520px) {
 
-  .blow-heart,
-  .blow-sparkle {
-    left: 50%;
-    top: 60%;
+  body > span {
+    top: 60% !important;
   }
 
-  .blow-big-heart {
-    left: 50%;
-    top: 60%;
-    font-size: 38px;
-  }
+  @keyframes blowHeartAnimation {
 
-  .blow-burst {
-    left: 50%;
-    top: 60%;
+    0% {
+      transform:
+        translate(-50%, -50%)
+        scale(0.25)
+        rotate(0deg);
+
+      opacity: 0;
+    }
+
+    10% {
+      transform:
+        translate(-50%, -50%)
+        scale(0.9)
+        rotate(0deg);
+
+      opacity: 1;
+    }
+
+    45% {
+      transform:
+        translate(
+          calc(-50% + var(--blow-x, 0px)),
+          calc(-50% - 140px)
+        )
+        scale(0.9)
+        rotate(180deg);
+
+      opacity: 1;
+    }
+
+    75% {
+      transform:
+        translate(
+          calc(-50% + var(--blow-x, 0px)),
+          calc(-50% - 260px)
+        )
+        scale(0.75)
+        rotate(360deg);
+
+      opacity: 0.8;
+    }
+
+    100% {
+      transform:
+        translate(
+          calc(-50% + var(--blow-x, 0px)),
+          calc(-50% - 350px)
+        )
+        scale(0.3)
+        rotate(540deg);
+
+      opacity: 0;
+    }
   }
 }
