@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================================================= */
 
   const GITHUB_IMAGES = [
-   "images/S_44457989_0.jpg",
+   "images/S__44457989_0.jpg",
   "images/S__48840712_0.jpg",
   "images/S__48840715_0.jpg",
   "images/S__48840716_0.jpg"
