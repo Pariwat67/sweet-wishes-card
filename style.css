@@ -75,11 +75,14 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
   margin-top: 10px;
 }
 /* ==================================================
-   FIX BLOW CANDLE HEART EFFECT
+   💗 BLOW CANDLE EFFECT - FIXED
    ================================================== */
 
 .blow-heart {
   position: fixed !important;
+
+  left: 50%;
+  top: 65%;
 
   pointer-events: none;
   user-select: none;
@@ -87,14 +90,17 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
   z-index: 9999;
 
   line-height: 1;
+  font-size: var(--size, 24px);
 
-  opacity: 1;
+  opacity: 0;
 
-  transform: translate(-50%, -50%) scale(1);
+  transform:
+    translate(-50%, -50%)
+    scale(.4);
 
   animation:
     blowHeartRise
-    var(--duration, 3s)
+    var(--duration, 2.8s)
     cubic-bezier(.18, .75, .25, 1)
     forwards;
 
@@ -102,43 +108,56 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 }
 
 
-/* ห้ามใช้ left/top ใน keyframe */
+/* หัวใจลอยออกจากบริเวณเค้ก */
+
 @keyframes blowHeartRise {
 
   0% {
-    opacity: 1;
+    opacity: 0;
 
     transform:
       translate(
-        calc(-50% + 0px),
-        calc(-50% + 0px)
+        -50%,
+        -50%
       )
-      scale(.6)
+      scale(.4)
       rotate(0deg);
   }
 
-  20% {
+  10% {
     opacity: 1;
 
     transform:
       translate(
-        calc(-50% + var(--x1)),
-        calc(-50% - 45px)
+        calc(-50% + var(--x1, 0px)),
+        calc(-50% - 15px)
       )
       scale(1)
-      rotate(var(--r1));
+      rotate(var(--r1, 0deg));
   }
 
-  55% {
-    opacity: .95;
+  45% {
+    opacity: 1;
 
     transform:
       translate(
-        calc(-50% + var(--x2)),
-        calc(-50% - 150px)
+        calc(-50% + var(--x2, 0px)),
+        calc(-50% - 100px)
       )
       scale(1.05)
-      rotate(var(--r2));
+      rotate(var(--r2, 0deg));
+  }
+
+  75% {
+    opacity: .8;
+
+    transform:
+      translate(
+        calc(-50% + var(--x3, 0px)),
+        calc(-50% - 190px)
+      )
+      scale(.9)
+      rotate(var(--r3, 0deg));
   }
 
   100% {
@@ -146,22 +165,25 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 
     transform:
       translate(
-        calc(-50% + var(--x3)),
-        calc(-50% - 350px)
+        calc(-50% + var(--x4, 0px)),
+        calc(-50% - 320px)
       )
-      scale(.7)
-      rotate(var(--r3));
+      scale(.65)
+      rotate(var(--r4, 0deg));
   }
 
 }
 
 
 /* ==================================================
-   SPARKLE
+   ✨ SPARKLE
    ================================================== */
 
 .blow-sparkle {
   position: fixed !important;
+
+  left: 50%;
+  top: 65%;
 
   pointer-events: none;
   user-select: none;
@@ -169,10 +191,13 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
   z-index: 10000;
 
   line-height: 1;
+  font-size: var(--size, 20px);
 
-  opacity: 1;
+  opacity: 0;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%)
+    scale(.3);
 
   animation:
     blowSparkleRise
@@ -187,15 +212,24 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 @keyframes blowSparkleRise {
 
   0% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      scale(.3)
+      rotate(0deg);
+  }
+
+  15% {
     opacity: 1;
 
     transform:
       translate(
-        -50%,
-        -50%
+        calc(-50% + var(--x1, 0px)),
+        calc(-50% - 20px)
       )
-      scale(.5)
-      rotate(0deg);
+      scale(1)
+      rotate(45deg);
   }
 
   50% {
@@ -203,11 +237,11 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 
     transform:
       translate(
-        calc(-50% + var(--x)),
-        calc(-50% - 100px)
+        calc(-50% + var(--x2, 0px)),
+        calc(-50% - 110px)
       )
       scale(1.2)
-      rotate(90deg);
+      rotate(120deg);
   }
 
   100% {
@@ -215,22 +249,25 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 
     transform:
       translate(
-        calc(-50% + var(--x2)),
-        calc(-50% - 260px)
+        calc(-50% + var(--x3, 0px)),
+        calc(-50% - 250px)
       )
-      scale(.7)
-      rotate(180deg);
+      scale(.6)
+      rotate(240deg);
   }
 
 }
 
 
 /* ==================================================
-   BIG HEART
+   💗 BIG HEART
    ================================================== */
 
 .blow-big-heart {
   position: fixed !important;
+
+  left: 50%;
+  top: 65%;
 
   pointer-events: none;
   user-select: none;
@@ -238,20 +275,20 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
   z-index: 10001;
 
   font-size: 46px;
-
   line-height: 1;
+
+  opacity: 0;
 
   transform:
     translate(-50%, -50%)
-    scale(.3);
-
-  opacity: 0;
+    scale(.2);
 
   animation:
     blowBigHeart
     1.5s
     cubic-bezier(.16, 1.2, .3, 1)
     forwards;
+
 }
 
 
@@ -262,10 +299,10 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 
     transform:
       translate(-50%, -50%)
-      scale(.3);
+      scale(.2);
   }
 
-  25% {
+  20% {
     opacity: 1;
 
     transform:
@@ -273,11 +310,11 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
       scale(1.2);
   }
 
-  60% {
+  50% {
     opacity: 1;
 
     transform:
-      translate(-50%, -90%)
+      translate(-50%, -80px)
       scale(1);
   }
 
@@ -285,7 +322,7 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
     opacity: 0;
 
     transform:
-      translate(-50%, -180%)
+      translate(-50%, -180px)
       scale(.7);
   }
 
@@ -293,14 +330,17 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 
 
 /* ==================================================
-   LIGHT BURST
+   ✨ LIGHT BURST
    ================================================== */
 
 .blow-burst {
   position: fixed !important;
 
-  width: 36px;
-  height: 36px;
+  left: 50%;
+  top: 65%;
+
+  width: 40px;
+  height: 40px;
 
   border-radius: 50%;
 
@@ -355,12 +395,31 @@ input[type=file]{width:100%;padding:10px;border:1px dashed var(--border);border-
 }
 
 
-/* มือถือ */
+/* ==================================================
+   📱 MOBILE
+   ================================================== */
 
 @media (max-width: 520px) {
 
+  .blow-heart {
+    left: 50%;
+    top: 62%;
+  }
+
+  .blow-sparkle {
+    left: 50%;
+    top: 62%;
+  }
+
   .blow-big-heart {
+    left: 50%;
+    top: 62%;
     font-size: 38px;
+  }
+
+  .blow-burst {
+    left: 50%;
+    top: 62%;
   }
 
 }
