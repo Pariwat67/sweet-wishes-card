@@ -1,6 +1,6 @@
 /* =========================================================
    SWEET WISHES - SCRIPT.JS
-   GitHub Images Version
+   FIXED SHARE LINK + QR CODE VERSION
    ========================================================= */
 
 "use strict";
@@ -11,15 +11,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================================================
      GITHUB IMAGES
-     เปลี่ยนชื่อไฟล์ตรงนี้ให้ตรงกับไฟล์ในโฟลเดอร์ images
      ========================================================= */
 
   const GITHUB_IMAGES = [
-   "images/S__44457989_0.jpg",
-  "images/S__48840712_0.jpg",
-  "images/S__48840715_0.jpg",
-  "images/S__48840716_0.jpg"
+    "images/S__44457989_0.jpg",
+    "images/S__48840712_0.jpg",
+    "images/S__48840715_0.jpg",
+    "images/S__48840716_0.jpg"
   ];
+
+  /* =========================================================
+     STATE
+     ========================================================= */
 
   const state = {
     recipient: "",
@@ -28,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sender: "",
     theme: "pink",
     images: [...GITHUB_IMAGES],
-    music: null,
+    music: "",
     musicName: ""
   };
 
@@ -37,15 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let imageFiles = [];
   let musicUrl = "";
 
+  /* =========================================================
+     PAGES
+     ========================================================= */
+
   const pages = {
     landing: $("landing"),
     creator: $("creator"),
     card: $("cardPage")
   };
-
-  /* =========================================================
-     PAGE
-     ========================================================= */
 
   function showPage(name) {
 
@@ -197,11 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
       "change",
       event => {
 
-        /*
-          ส่วนนี้ยังเก็บไว้สำหรับ preview
-          รูปที่สร้างการ์ดจริงจะใช้ GITHUB_IMAGES
-        */
-
         imageFiles =
           Array.from(
             event.target.files || []
@@ -341,6 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("startBtn");
 
   if (startBtn) {
+
     startBtn.onclick =
       () => showPage("creator");
   }
@@ -349,6 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("createTopBtn");
 
   if (createTopBtn) {
+
     createTopBtn.onclick =
       () => showPage("creator");
   }
@@ -357,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("backBtn");
 
   if (backBtn) {
+
     backBtn.onclick =
       () => showPage("landing");
   }
@@ -365,6 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
     $("editBtn");
 
   if (editBtn) {
+
     editBtn.onclick =
       () => showPage("creator");
   }
@@ -450,11 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
         theme:
           state.theme,
 
-        /*
-          เก็บ URL รูป GitHub
-          ไม่เก็บ Base64
-        */
-
         images:
           [...GITHUB_IMAGES],
 
@@ -536,12 +533,6 @@ document.addEventListener("DOMContentLoaded", () => {
       state.theme =
         data.theme || "pink";
 
-      /*
-        สำคัญ:
-        ไม่โหลดรูปจาก localStorage
-        ใช้รูปจาก GitHub โดยตรง
-      */
-
       state.images =
         [...GITHUB_IMAGES];
 
@@ -583,6 +574,7 @@ document.addEventListener("DOMContentLoaded", () => {
             button.dataset.theme ===
               state.theme
           );
+
         });
 
       updatePreview();
@@ -641,7 +633,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     /* =====================================================
-       GITHUB IMAGE GALLERY
+       IMAGE GALLERY
        ===================================================== */
 
     const gallery =
@@ -785,10 +777,6 @@ document.addEventListener("DOMContentLoaded", () => {
       state.theme
     );
 
-    /* =====================================================
-       ใช้รูปจาก GitHub
-       ===================================================== */
-
     state.images =
       [...GITHUB_IMAGES];
 
@@ -873,7 +861,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
 
       state.music =
-        null;
+        "";
 
       state.musicName =
         "";
@@ -978,9 +966,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  /* =======================================================
+  /* =========================================================
      BLOW CANDLE EFFECT
-     ======================================================= */
+     ========================================================= */
 
   function createBlowCelebration() {
 
@@ -1000,9 +988,7 @@ document.addEventListener("DOMContentLoaded", () => {
       rect.top +
       rect.height * 0.18;
 
-    /* =====================================================
-       BURST
-       ===================================================== */
+    /* BURST */
 
     const burst =
       document.createElement("div");
@@ -1025,9 +1011,7 @@ document.addEventListener("DOMContentLoaded", () => {
       1000
     );
 
-    /* =====================================================
-       HEARTS
-       ===================================================== */
+    /* HEARTS */
 
     const hearts = [
       "❤️",
@@ -1124,9 +1108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    /* =====================================================
-       SPARKLES
-       ===================================================== */
+    /* SPARKLES */
 
     const sparkles = [
       "✨",
@@ -1191,9 +1173,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    /* =====================================================
-       BIG HEART
-       ===================================================== */
+    /* BIG HEART */
 
     const bigHeart =
       document.createElement("div");
@@ -1220,9 +1200,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  /* =======================================================
+  /* =========================================================
      CONFETTI
-     ======================================================= */
+     ========================================================= */
 
   function confetti() {
 
@@ -1310,9 +1290,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* =======================================================
+  /* =========================================================
      BLOW BUTTON
-     ======================================================= */
+     ========================================================= */
 
   const blowBtn =
     $("blowBtn");
@@ -1355,9 +1335,9 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  /* =======================================================
+  /* =========================================================
      SHARE DATA
-     ======================================================= */
+     ========================================================= */
 
   function encodeShareData(data) {
 
@@ -1394,25 +1374,50 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/=+$/, "");
   }
 
-  function decodeShareData(
-    encoded
-  ) {
+  /* =========================================================
+     FIXED DECODE
+     ========================================================= */
 
-    const base64 =
+  function decodeShareData(encoded) {
+
+    if (!encoded) {
+      throw new Error(
+        "ไม่มีข้อมูลการ์ด"
+      );
+    }
+
+    try {
+
+      /* รองรับ URL encoding */
+
+      encoded =
+        decodeURIComponent(
+          encoded
+        );
+
+    } catch {
+      /* ใช้ค่าเดิม */
+    }
+
+    /* Base64 URL-safe → Base64 */
+
+    let base64 =
       encoded
         .replace(/-/g, "+")
         .replace(/_/g, "/");
 
-    const padded =
-      base64 +
-      "=".repeat(
-        (4 -
-          (base64.length % 4)) %
-          4
-      );
+    /* เติม = */
+
+    while (
+      base64.length % 4 !== 0
+    ) {
+      base64 += "=";
+    }
+
+    /* Decode */
 
     const binary =
-      atob(padded);
+      atob(base64);
 
     const bytes =
       Uint8Array.from(
@@ -1421,15 +1426,29 @@ document.addEventListener("DOMContentLoaded", () => {
           character.charCodeAt(0)
       );
 
-    return JSON.parse(
-      new TextDecoder()
-        .decode(bytes)
-    );
+    const json =
+      new TextDecoder(
+        "utf-8"
+      ).decode(bytes);
+
+    const data =
+      JSON.parse(json);
+
+    if (
+      !data ||
+      typeof data !== "object"
+    ) {
+      throw new Error(
+        "ข้อมูลการ์ดไม่ถูกต้อง"
+      );
+    }
+
+    return data;
   }
 
-  /* =======================================================
-     SHARE PAYLOAD
-     ======================================================= */
+  /* =========================================================
+     CREATE SHARE PAYLOAD
+     ========================================================= */
 
   function createSharePayload() {
 
@@ -1455,27 +1474,40 @@ document.addEventListener("DOMContentLoaded", () => {
         state.music || ""
     };
 
-    /*
-      ไม่ใส่รูปใน QR
-      เพราะรูปโหลดจาก GitHub /images/
-    */
-
     return encodeShareData(
       data
     );
   }
 
+  /* =========================================================
+     MAKE SHARE URL
+     ========================================================= */
+
   function makeShareUrl() {
 
+    const payload =
+      createSharePayload();
+
+    /*
+      สำคัญ:
+      ใช้ URL เว็บปัจจุบัน
+      แล้วต่อ #card=ข้อมูล
+    */
+
+    const baseUrl =
+      window.location.origin +
+      window.location.pathname;
+
     return (
-      `${location.origin}${location.pathname}` +
-      `#card=${createSharePayload()}`
+      baseUrl +
+      "#card=" +
+      payload
     );
   }
 
-  /* =======================================================
+  /* =========================================================
      SHARE BUTTON
-     ======================================================= */
+     ========================================================= */
 
   const shareBtn =
     $("shareBtn");
@@ -1495,7 +1527,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           alert(
             "คัดลอกลิงก์การ์ดแล้ว 💗\n" +
-            "นำไปส่งให้เพื่อนได้เลย"
+            "นำไปส่งให้แฟนได้เลย"
           );
 
         } catch {
@@ -1508,9 +1540,9 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  /* =======================================================
+  /* =========================================================
      QR CODE
-     ======================================================= */
+     ========================================================= */
 
   const qrBtn =
     $("qrBtn");
@@ -1519,6 +1551,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     qrBtn.onclick =
       () => {
+
+        /*
+          สร้าง URL การ์ดโดยตรง
+        */
 
         const url =
           makeShareUrl();
@@ -1540,10 +1576,15 @@ document.addEventListener("DOMContentLoaded", () => {
           260;
 
         img.alt =
-          "QR Code";
+          "QR Code สำหรับเปิดการ์ด";
 
         img.loading =
           "eager";
+
+        /*
+          QR นี้จะเก็บ URL เต็ม
+          ไม่ใช่เก็บ JSON โดยตรง
+        */
 
         img.src =
           "https://api.qrserver.com/v1/create-qr-code/" +
@@ -1552,6 +1593,13 @@ document.addEventListener("DOMContentLoaded", () => {
           "&margin=12" +
           "&data=" +
           encodeURIComponent(url);
+
+        img.onerror =
+          () => {
+
+            box.innerHTML =
+              "<p>สร้าง QR Code ไม่สำเร็จ กรุณาลองใหม่</p>";
+          };
 
         box.appendChild(
           img
@@ -1563,7 +1611,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (qrWarning) {
 
           qrWarning.textContent =
-            "QR นี้เก็บข้อมูลข้อความเท่านั้น รูปจะโหลดจาก GitHub";
+            "สแกน QR นี้แล้วจะเปิดการ์ดใบนี้โดยตรง 💗";
         }
 
         const qrModal =
@@ -1578,9 +1626,9 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  /* =======================================================
+  /* =========================================================
      CLOSE QR
-     ======================================================= */
+     ========================================================= */
 
   const closeQr =
     $("closeQr");
@@ -1624,9 +1672,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  /* =======================================================
+  /* =========================================================
      COPY LINK
-     ======================================================= */
+     ========================================================= */
 
   const copyLinkBtn =
     $("copyLinkBtn");
@@ -1667,29 +1715,54 @@ document.addEventListener("DOMContentLoaded", () => {
       };
   }
 
-  /* =======================================================
-     LOAD CARD FROM QR
-     ======================================================= */
+  /* =========================================================
+     LOAD CARD FROM SHARE URL / QR
+     ========================================================= */
 
   function loadFromHash() {
 
     const hash =
-      location.hash;
+      window.location.hash;
+
+    /*
+      ต้องขึ้นต้นด้วย #card=
+    */
 
     if (
-      !hash.startsWith(
-        "#card="
-      )
+      !hash ||
+      !hash.startsWith("#card=")
     ) {
+
       return false;
     }
 
     try {
 
+      /*
+        ตัด #card= ออก
+        โดยใช้ความยาวจริง
+      */
+
+      const encoded =
+        hash.substring(
+          "#card=".length
+        );
+
+      if (!encoded) {
+
+        throw new Error(
+          "ไม่มีข้อมูลหลัง #card="
+        );
+      }
+
       const payload =
         decodeShareData(
-          hash.slice(6)
+          encoded
         );
+
+      /* =====================================================
+         LOAD FORM DATA
+         ===================================================== */
 
       if ($("recipient")) {
 
@@ -1716,6 +1789,10 @@ document.addEventListener("DOMContentLoaded", () => {
           payload.s || "";
       }
 
+      /* =====================================================
+         UPDATE STATE
+         ===================================================== */
+
       state.recipient =
         payload.r || "";
 
@@ -1730,8 +1807,7 @@ document.addEventListener("DOMContentLoaded", () => {
         payload.s || "";
 
       state.theme =
-        payload.th ||
-        "pink";
+        payload.th || "pink";
 
       state.music =
         payload.mu || "";
@@ -1745,6 +1821,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       musicUrl =
         state.music;
+
+      /* =====================================================
+         MUSIC UI
+         ===================================================== */
 
       if ($("musicInput")) {
 
@@ -1760,21 +1840,21 @@ document.addEventListener("DOMContentLoaded", () => {
             : "ยังไม่ได้ใส่ลิงก์เพลง";
       }
 
-      /*
-        สำคัญมาก:
-        เมื่อเปิดจาก QR
-        ให้ใช้รูปจาก GitHub
-      */
+      /* =====================================================
+         IMAGES
+         ===================================================== */
 
       imageFiles = [];
 
       state.images =
         [...GITHUB_IMAGES];
 
+      /* =====================================================
+         THEME UI
+         ===================================================== */
+
       document
-        .querySelectorAll(
-          ".theme-option"
-        )
+        .querySelectorAll(".theme-option")
         .forEach(button => {
 
           button.classList.toggle(
@@ -1784,41 +1864,64 @@ document.addEventListener("DOMContentLoaded", () => {
           );
         });
 
+      /* =====================================================
+         RENDER
+         ===================================================== */
+
       updatePreview();
 
       renderFullCard();
 
+      /*
+        สำคัญมาก:
+        เปิดการ์ดทันที
+      */
+
       showPage("card");
+
+      /*
+        เก็บไว้ในเครื่องด้วย
+        แต่ไม่ใช้เป็นข้อมูลหลัก
+      */
+
+      try {
+        saveCard();
+      } catch {}
 
       return true;
 
     } catch (error) {
 
       console.error(
-        "โหลดข้อมูล QR ไม่สำเร็จ:",
+        "โหลดข้อมูลการ์ดไม่สำเร็จ:",
         error
       );
 
+      /*
+        ไม่เปิดหน้า Creator
+        ถ้า URL มี #card=
+        แต่ข้อมูลเสีย
+      */
+
       alert(
-        "QR Code นี้ไม่ถูกต้องหรือข้อมูลเสียหาย"
+        "ไม่สามารถเปิดการ์ดนี้ได้\n" +
+        "ลิงก์อาจไม่ครบหรือข้อมูลเสียหาย"
       );
 
       return false;
     }
   }
 
-  /* =======================================================
+  /* =========================================================
      PARTICLES
-     ======================================================= */
+     ========================================================= */
 
   function createParticles() {
 
     const box =
       $("particles");
 
-    if (!box) {
-      return;
-    }
+    if (!box) return;
 
     const symbols = [
       "♡",
@@ -1865,19 +1968,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* =======================================================
+  /* =========================================================
      INITIALIZE
-     ======================================================= */
+     ========================================================= */
 
   updatePreview();
 
   createParticles();
 
-  if (!loadFromHash()) {
+  /*
+    สำคัญที่สุด
+
+    ถ้ามี #card=
+    ให้เปิดการ์ดก่อน
+
+    ถ้าไม่มี #card=
+    ค่อยโหลดการ์ดที่จำไว้ในเครื่อง
+  */
+
+  const openedFromShare =
+    loadFromHash();
+
+  if (!openedFromShare) {
 
     if (loadSavedCard()) {
 
       showPage("card");
+
+    } else {
+
+      showPage("landing");
     }
   }
 
