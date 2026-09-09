@@ -24,64 +24,42 @@
     rel="stylesheet"
   >
 
-  <link rel="stylesheet" href="style.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css?v=20260909">
+
 </head>
 
 <body>
 
-  <!-- Background particles -->
+  <!-- Background -->
   <div id="particles"></div>
 
   <main>
 
-    <!-- =====================================================
-         CARD PAGE
-         ===================================================== -->
-
     <section id="cardPage" class="page active">
 
-      <!-- Toolbar -->
-      <div class="card-toolbar">
-
-        <button
-          type="button"
-          class="ghost-btn"
-          id="shareBtn"
-        >
-          🔗 แชร์
-        </button>
-
-        <button
-          type="button"
-          class="ghost-btn"
-          id="qrBtn"
-        >
-          📱 QR Code
-        </button>
-
-      </div>
-
-
-      <!-- ===================================================
+      <!-- =========================
            MAIN CARD
-           =================================================== -->
+           ========================= -->
 
       <div
         id="fullCard"
         class="full-card theme-pink"
       >
 
-        <!-- Decorations -->
+        <!-- Decorative sparkles -->
         <div class="sparkles">
           ✦　✧　✦　✧　✦
         </div>
 
+
+        <!-- Small heading -->
         <p class="card-kicker">
           A SPECIAL WISH FOR YOU
         </p>
 
 
-        <!-- Title -->
+        <!-- Birthday title -->
         <h1 id="cardTitle">
           Happy Birthday!
         </h1>
@@ -89,16 +67,16 @@
 
         <!-- Recipient -->
         <div
-          class="recipient-name"
           id="cardRecipient"
+          class="recipient-name"
         >
           ชื่อคนรับ
         </div>
 
 
-        <!-- =================================================
+        <!-- =========================
              CAKE
-             ================================================= -->
+             ========================= -->
 
         <div class="cake-stage">
 
@@ -108,26 +86,29 @@
             aria-label="เค้กวันเกิด"
           >
 
+            <!-- Flames -->
             <div class="flame-row">
-
               <span class="flame">🔥</span>
               <span class="flame">🔥</span>
               <span class="flame">🔥</span>
-
             </div>
 
+
+            <!-- Candles -->
             <div class="candles">
-
               <i></i>
               <i></i>
               <i></i>
-
             </div>
 
+
+            <!-- Strawberries -->
             <div class="cake-top">
               🍓　🍓　🍓
             </div>
 
+
+            <!-- Cake -->
             <div class="cake-body">
               🎂
             </div>
@@ -135,15 +116,17 @@
           </div>
 
 
+          <!-- Blow candles -->
           <button
-            type="button"
             id="blowBtn"
             class="secondary-btn"
+            type="button"
           >
             🌬️ เป่าเทียน
           </button>
 
 
+          <!-- After blowing -->
           <p
             id="blowMessage"
             class="blow-message hidden"
@@ -154,9 +137,9 @@
         </div>
 
 
-        <!-- =================================================
+        <!-- =========================
              MESSAGE
-             ================================================= -->
+             ========================= -->
 
         <div class="message-box">
 
@@ -167,9 +150,9 @@
         </div>
 
 
-        <!-- =================================================
+        <!-- =========================
              GALLERY
-             ================================================= -->
+             ========================= -->
 
         <div
           id="gallery"
@@ -177,9 +160,9 @@
         ></div>
 
 
-        <!-- =================================================
+        <!-- =========================
              MUSIC
-             ================================================= -->
+             ========================= -->
 
         <div
           id="musicPlayer"
@@ -192,6 +175,7 @@
               เพลงของเรา
             </span>
           </div>
+
 
           <a
             id="musicLink"
@@ -206,13 +190,13 @@
         </div>
 
 
-        <!-- =================================================
+        <!-- =========================
              SENDER
-             ================================================= -->
+             ========================= -->
 
         <p
-          class="sender"
           id="cardSender"
+          class="sender"
         >
           — จากใคร —
         </p>
@@ -225,63 +209,13 @@
 
       </div>
 
-
-      <!-- ===================================================
-           QR MODAL
-           =================================================== -->
-
-      <div
-        id="qrModal"
-        class="modal hidden"
-      >
-
-        <div class="modal-box">
-
-          <button
-            type="button"
-            class="close-btn"
-            id="closeQr"
-            aria-label="ปิด"
-          >
-            ×
-          </button>
-
-
-          <h2>
-            📱 สแกนเพื่อเปิดการ์ด
-          </h2>
-
-
-          <div id="qrcode"></div>
-
-
-          <p>
-            นำกล้องมือถือสแกน QR Code นี้
-          </p>
-
-
-          <button
-            type="button"
-            class="primary-btn"
-            id="copyLinkBtn"
-          >
-            🔗 คัดลอกลิงก์
-          </button>
-
-
-          <small id="qrWarning"></small>
-
-        </div>
-
-      </div>
-
     </section>
 
   </main>
 
 
   <!-- JavaScript -->
-  <script src="script.js" defer></script>
+  <script src="script.js?v=20260909" defer></script>
 
 </body>
 </html>
